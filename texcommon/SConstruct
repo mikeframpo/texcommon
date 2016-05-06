@@ -1,0 +1,51 @@
+
+import os
+
+def relitavise(paths):
+    print('Paths===')
+    for ipath in range(len(paths)):
+        if isinstance(paths[ipath], list):
+            continue
+        paths[ipath] = '#' + paths[ipath]
+
+def replace_ext(srcpath, ext):
+    base = os.path.splitext(srcpath)[0]
+    return base + '.' + ext
+
+Import('*')
+
+AddOption('--tex',
+          dest='tex',
+          type='string',
+          nargs=1,
+          action='store')
+
+if len(src) == 0:
+    raise Exception('no source files specified')
+
+relitavise(src)
+src.append('references.bib')
+src.append('common.tex')
+src.append('symbols.tex')
+
+src.append(Glob('../tex/tikz/*.tex'))
+src.append(Glob('../img/*'))
+src.append(Glob('../img/gen/*'))
+
+textarget = GetOption('tex')
+
+if textarget is not None:
+    target = '#' + replace_ext(textarget, 'pdf')
+    srctex = replace_ext(target, 'tex')
+else:
+    srctex = src[0]
+    target = replace_ext(srctex, 'pdf')
+
+print('### building: ' + target)
+print('### from tex: ' + srctex)
+#print('### src: ' + str(src))
+
+srctex = srctex.lstrip('#')
+env = Environment()
+env.Command(target, src, 'latexmk -pdf ' + srctex)
+

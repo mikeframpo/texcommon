@@ -1,0 +1,23 @@
+
+# latex build files
+*.aux
+*.log
+*.toc
+*.blg
+*.ilg
+*.bbl
+*.fdb_latexmk
+*.fls
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.pyg
+*.pdf
+
+# vim swap files
+*.swp
+.exrc
+
+# SConstruct build artefacts
+.sconsign.dblite

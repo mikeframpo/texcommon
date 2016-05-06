@@ -1,0 +1,31 @@
+
+\documentclass[12pt]{article}
+
+\newcommand{\texcommon}{../texcommon}
+
+\usepackage{acronym}
+\usepackage{amsmath}
+\usepackage{gensymb}
+\usepackage{natbib}
+
+\input{\texcommon/common.tex} 
+\input{\texcommon/symbols.tex}
+
+\usepackage[a4paper,top=3cm,bottom=3cm,left=2cm,right=2cm]{geometry}
+\setlength{\parskip}{\baselineskip}
+
+\renewcommand{\bibname}{References}
+
+%comment in brackets
+\renewcommand{\mcomm}[1]{}
+
+\begin{document}
+
+This is an example document for Mike Frampton's texcommon package.
+
+\bibliographystyle{plainnat}
+\bibliography{\texcommon/references.bib}
+
+\end{document}
+
+

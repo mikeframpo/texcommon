@@ -1,0 +1,6 @@
+
+src = ['doc_example.tex']
+Export('src')
+
+SConscript('../texcommon/SConstruct')
+
