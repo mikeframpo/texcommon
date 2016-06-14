@@ -104,8 +104,13 @@ def fig_quarterpage():
 def fig_whole_quarter():
     return plt.figure(figsize=(a4size_inch[0], a4size_inch[1]/4))
 
-def fig_whole_half():
+def fig_whole_43():
     xdim = a4size_inch[0] * fig_scale
+    ydim = xdim * 0.75
+    return plt.figure(figsize=(xdim, ydim))
+
+def fig_half_43():
+    xdim = a4size_inch[0]/2 * fig_scale
     ydim = xdim * 0.75
     return plt.figure(figsize=(xdim, ydim))
 
