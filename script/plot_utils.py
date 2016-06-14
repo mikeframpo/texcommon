@@ -1,17 +1,34 @@
 
+import numpy as np
+import math
+import os
 import matplotlib as mpl
-#mpl.use('TkAgg')
+
+mpl.use('pgf')
+
+pgf_with_latex = {                      # setup matplotlib to use latex for output
+    "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+    "text.usetex": True,                # use LaTeX to write all text
+    "font.family": "serif",
+    "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
+    "font.sans-serif": [],
+    "font.monospace": [],
+    "axes.labelsize": 10,               # LaTeX default is 10pt font.
+    "text.fontsize": 10,
+    "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "figure.figsize": (10.0, 10.0),     # default fig size of 0.9 textwidth
+    "pgf.preamble": [
+        r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
+        r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
+        ]
+    }
+mpl.rcParams.update(pgf_with_latex)
 
 import matplotlib.pyplot as plt
-import numpy as np
 
-import datasets as ds
-import msignal
-import math
-
-import os
-
-mpl.rcParams.update ({'font.size': 7})
+#mpl.rcParams.update ({'font.size': 7})
 mpl.rcParams['lines.linewidth'] = 1.0
 
 _savefigs = True
@@ -61,8 +78,7 @@ a4margins_inch=(2.0/cm_per_inch, 3.0/cm_per_inch)
 a4size_inch=(a4pagesize_inch[0] - 2.0*a4margins_inch[0],
                 a4pagesize_inch[1] - 2.0*a4margins_inch[1])
 
-def fig_halfpage():
-    return plt.figure(figsize=(6.7, 4.0))
+fig_scale = 0.9
 
 def fig_thirdpage():
     return plt.figure(figsize=(14, 6))
@@ -84,9 +100,10 @@ def fig_quarterpage():
 def fig_whole_quarter():
     return plt.figure(figsize=(a4size_inch[0], a4size_inch[1]/4))
 
-def fig_half_43():
-    xdim = a4size_inch[0]/2
-    return plt.figure(figsize=(xdim, xdim*3/4))
+def fig_whole_half():
+    xdim = a4size_inch[0]/2 * fig_scale
+    ydim = xdim * 0.75 * fig_scale
+    return plt.figure(figsize=(xdim, ydim))
 
 def fig_whole_40p():
     return plt.figure(figsize=(a4size_inch[0], a4size_inch[1]*0.4))
@@ -220,7 +237,7 @@ def plt_stft(sig, width, window='hamming', fmax=None, interp=None):
                 ifmax = ifreq
                 break
     #cut out the negative freq_components
-    XX2 = msignal.Msignal([X[:ifmax] for X in XX])
+    XX2 = [X[:ifmax] for X in XX]
 
     plt.imshow(np.abs(XX2.T), aspect='auto', interpolation=interp, origin='lower',
             extent=(t[0]*1e6, t[-1]*1e6, f[0], f[ifmax]))
