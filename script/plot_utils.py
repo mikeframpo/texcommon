@@ -4,45 +4,49 @@ import math
 import os
 import matplotlib as mpl
 
-mpl.use('pgf')
+def _save_enabled():
+    if os.environ.has_key('SAVEFIGS'):
+        return True
+    return False
 
-pgf_with_latex = {                      # setup matplotlib to use latex for output
-    "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
-    "text.usetex": True,                # use LaTeX to write all text
-    "font.family": "serif",
-    "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
-    "font.sans-serif": [],
-    "font.monospace": [],
-    "axes.labelsize": 10,               # LaTeX default is 10pt font.
-    "text.fontsize": 10,
-    "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
-    "xtick.labelsize": 8,
-    "ytick.labelsize": 8,
-    "figure.figsize": (10.0, 10.0),     # default fig size of 0.9 textwidth
-    "pgf.preamble": [
-        r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
-        r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
-        ]
-    }
-mpl.rcParams.update(pgf_with_latex)
+if _save_enabled():
+
+    mpl.use('pgf')
+
+    pgf_with_latex = {                      # setup matplotlib to use latex for output
+        "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+        "text.usetex": True,                # use LaTeX to write all text
+        "font.family": "serif",
+        "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
+        "font.sans-serif": [],
+        "font.monospace": [],
+        "axes.labelsize": 10,               # LaTeX default is 10pt font.
+        "text.fontsize": 10,
+        "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
+        "xtick.labelsize": 8,
+        "ytick.labelsize": 8,
+        "figure.figsize": (10.0, 10.0),     # default fig size of 0.9 textwidth
+        "pgf.preamble": [
+            r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
+            r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
+            ]
+        }
+    mpl.rcParams.update(pgf_with_latex)
 
 import matplotlib.pyplot as plt
 
 #mpl.rcParams.update ({'font.size': 7})
 mpl.rcParams['lines.linewidth'] = 1.0
 
-_savefigs = True
-
-def _save_enabled():
-    if os.environ.has_key('SAVEFIGS'):
-        return True
-    return False
-
 def savefig(fname, fig=None):
     if _save_enabled():
-        plot_utils_dir = os.path.dirname(os.path.realpath(__file__))
-        path = os.path.join(plot_utils_dir, '../img/gen/', fname)
+        destpath = ''
+        genpath = '../imgbuild'
+        if os.path.isdir(genpath):
+            destpath = genpath
+        path = os.path.join(destpath, fname)
         dpi=200
+        print('Saving figure to: ' + path)
         if fig is not None:
             fig.tight_layout()
             fig.savefig(path, dpi=dpi)
@@ -60,10 +64,6 @@ def showsave(fnames, figs=None):
     if not _save_enabled():
         plt.show()
 
-def savefigs(save):
-    global _savefigs
-    _savefigs = save
-
 cm_per_inch=2.54
 
 # dimensions in inches
@@ -78,7 +78,11 @@ a4margins_inch=(2.0/cm_per_inch, 3.0/cm_per_inch)
 a4size_inch=(a4pagesize_inch[0] - 2.0*a4margins_inch[0],
                 a4pagesize_inch[1] - 2.0*a4margins_inch[1])
 
-fig_scale = 0.9
+if _save_enabled():
+    fig_scale = 0.8
+else:
+    # the figures are typically a bit small for analysis purposes
+    fig_scale = 3.0
 
 def fig_thirdpage():
     return plt.figure(figsize=(14, 6))
@@ -101,8 +105,8 @@ def fig_whole_quarter():
     return plt.figure(figsize=(a4size_inch[0], a4size_inch[1]/4))
 
 def fig_whole_half():
-    xdim = a4size_inch[0]/2 * fig_scale
-    ydim = xdim * 0.75 * fig_scale
+    xdim = a4size_inch[0] * fig_scale
+    ydim = xdim * 0.75
     return plt.figure(figsize=(xdim, ydim))
 
 def fig_whole_40p():
@@ -142,8 +146,6 @@ def plt_sig(sig, title=None, label=None, fmt=None, xmin=None, xmax=None,
         plt.axis(ymin=ylim[0], ymax=ylim[1])
     plt.axis(xmin=xmin, xmax=xmax)
     plt.legend(loc=legloc, labelspacing=0)
-    if fname is not None and _savefigs:
-        savefig(fname)
 
 def plt_sig_separate(sigs, **kwargs):
     fig = plt.gcf()
@@ -202,8 +204,6 @@ def plt_spec(sig, title=None, label=None, fname=None, zpfactor=None,
         plt.plot(fft.f, np.abs(fft))
     plt.legend()
     plt.gcf().subplots_adjust(bottom=0.15)
-    if fname is not None and _savefigs:
-        savefig(fname)
 
     return fft
 
