@@ -54,7 +54,7 @@ def savefig(fname, fig=None):
             plt.tight_layout()
             plt.savefig(path, dpi=dpi)
 
-def showsave(fnames, figs=None):
+def showsave(fnames, figs=None, block=False):
     if hasattr(fnames, '__iter__'):
         assert figs is not None
         for name, fig in zip(fnames, figs):
@@ -62,7 +62,7 @@ def showsave(fnames, figs=None):
     else:
         savefig(fnames, figs)
     if not _save_enabled():
-        plt.show()
+        plt.show(block=block)
 
 cm_per_inch=2.54
 
