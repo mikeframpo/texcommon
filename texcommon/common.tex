@@ -43,6 +43,9 @@
 \newcommand{\imag}[1]{\operatorname{Im}(#1)}
 \newcommand{\abs}[1]{\lvert#1\rvert}
 \newcommand{\spunit}{\,}						%spacing between value and it's unit
+\newcommand{\dpndx}[2]{\frac{\partial^{#1}}{\partial #2^{#1}}}	%partial nth derivative
+\newcommand{\dpdx}[1]{\dpndx{}{#1}}
+\newcommand{\dpddx}[1]{\dpndx{2}{#1}}							%partial second derivative
 
 % === Figures ===
 \newcommand{\sref}[1]{(\subref{#1})}
