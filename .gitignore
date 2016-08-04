@@ -21,3 +21,6 @@
 
 # SConstruct build artefacts
 .sconsign.dblite
+
+# python build files
+*.pyc

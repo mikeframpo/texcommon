@@ -1,32 +1,35 @@
 
 \usepackage{acronym}
 
-% === Acronyms ===
+% === Acronyms, alphabetical ===
+\acrodef{ADC}{Analogue to Digital Converter}
+\acrodef{AIC}{Akaike information criteria}
+\acrodef{DFT}{Discrete Fourier Transform}
 \acrodef{ECE}{Electrical and Computer Engineering}
+\acrodef{FTSP}{Flooding Time Synchronisation Protocol}
 \acrodef{GF}{growth and form}
+\acrodef{GPS}{Global Positioning System}
+\acrodef{GUI}{Graphical User Interface}
+\acrodef{IRQ}{Interrupt Request}
+\acrodef{mbps}{megabit per second}
 \acrodef{MFA}{Microfibril angle}
 \acrodef{MoE}{Modulus of Elasticity}
 \acrodef{MVA}{Multivariate analysis}
 \acrodef{NIR}{Near-infrared}
 \acrodef{NZSoF}{New Zealand School of Forestry}
 \acrodef{PCB}{printed circuit board}
-\acrodef{ToF}{Time of flight}
-\acrodef{GPS}{Global Positioning System}
-\acrodef{WTT}{Wireless Treetap}
-\acrodef{ADC}{Analogue to Digital Converter}
-\acrodef{PPS}{Pulse Per Second}
-\acrodef{TTF}{Time to Fix}
-\acrodef{PGA}{Programmable Gain Amplifier}
-\acrodef{SNR}{Signal to Noise Ratio}
-\acrodef{PSD}{Power Spectral Density}
-\acrodef{AIC}{Akaike information criteria}
-\acrodef{ppm}{parts per million}
-\acrodef{TCXO}{temperature-controlled crystal oscillator}
-
-% === Acronyms, alphabetical
-\acrodef{DFT}{Discrete Fourier Transform}
-\acrodef{GUI}{Graphical User Interface}
 \acrodef{PDS}{passive data structure} 
+\acrodef{PGA}{Programmable Gain Amplifier}
+\acrodef{ppm}{parts per million}
+\acrodef{PPS}{Pulse Per Second}
+\acrodef{PSD}{Power Spectral Density}
+\acrodef{SNR}{Signal to Noise Ratio}
+\acrodef{TC}{timer-counter}
+\acrodef{TCXO}{temperature-controlled crystal oscillator}
+\acrodef{ToF}{Time of flight}
+\acrodef{TTF}{Time to Fix}
+\acrodef{WSN}{Wireless sensor network}
+\acrodef{WTT}{Wireless Treetap}
 
 % === Development options ===
 \newcommand{\mcomm}[1]{\emph{(#1)}}				%comment in brackets
@@ -40,6 +43,9 @@
 \newcommand{\imag}[1]{\operatorname{Im}(#1)}
 \newcommand{\abs}[1]{\lvert#1\rvert}
 \newcommand{\spunit}{\,}						%spacing between value and it's unit
+\newcommand{\dpndx}[2]{\frac{\partial^{#1}}{\partial #2^{#1}}}	%partial nth derivative
+\newcommand{\dpdx}[1]{\dpndx{}{#1}}
+\newcommand{\dpddx}[1]{\dpndx{2}{#1}}							%partial second derivative
 
 % === Figures ===
 \newcommand{\sref}[1]{(\subref{#1})}
