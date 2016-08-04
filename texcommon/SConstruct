@@ -47,5 +47,11 @@ print('### from tex: ' + srctex)
 
 srctex = srctex.lstrip('#')
 env = Environment()
-env.Command(target, src, 'latexmk -pdf ' + srctex)
+cmd = env.Command(target, src, 'latexmk -pdf ' + srctex)
+
+Clean(cmd, Glob('#/*.bbl'))
+Clean(cmd, Glob('#/*.blg'))
+Clean(cmd, Glob('#/*.fdb_latexmk'))
+Clean(cmd, Glob('#/*.fls'))
+Clean(cmd, Glob('#/*.log'))
 
