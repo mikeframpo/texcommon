@@ -21,7 +21,7 @@ if _save_enabled():
         "font.sans-serif": [],
         "font.monospace": [],
         "axes.labelsize": 10,               # LaTeX default is 10pt font.
-        "text.fontsize": 10,
+        "font.size": 10,
         "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
         "xtick.labelsize": 8,
         "ytick.labelsize": 8,
@@ -78,6 +78,12 @@ a4margins_inch=(2.0/cm_per_inch, 3.0/cm_per_inch)
 a4size_inch=(a4pagesize_inch[0] - 2.0*a4margins_inch[0],
                 a4pagesize_inch[1] - 2.0*a4margins_inch[1])
 
+# this width was found using the following commands
+#
+# \printinunitsof{cm}\prntlen{\columnwidth}
+# \usepackage{layouts}
+ieee_col_width = 8.855 / cm_per_inch
+
 if _save_enabled():
     fig_scale = 0.8
 else:
@@ -106,6 +112,11 @@ def fig_whole_quarter():
 
 def fig_whole_43():
     xdim = a4size_inch[0] * fig_scale
+    ydim = xdim * 0.75
+    return plt.figure(figsize=(xdim, ydim))
+
+def fig_ieeecol_43():
+    xdim = ieee_col_width * fig_scale
     ydim = xdim * 0.75
     return plt.figure(figsize=(xdim, ydim))
 
