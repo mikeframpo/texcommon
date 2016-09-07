@@ -3,6 +3,19 @@ import os
 import json
 import subprocess
 
+class ImgArgs:
+
+    def __init__(self, script, args, img):
+        self.script = script
+        self.args = args
+        self.img = img
+    
+    def processed_key(self):
+        key = self.script
+        if self.args is not None:
+            key += '_' + self.args
+        return key
+
 # a dictionary mapping of image filename to script (including
 # script arguments)
 fname_to_script = None
@@ -39,10 +52,16 @@ def _load_image_deps():
     global fname_to_script
     fname_to_script = { }
     scripts = parsed['scripts']
-    for script in scripts.keys():
-        images = scripts[script]['img']
+    for script in scripts:
+        args = None
+        scriptpath = script.keys()[0]
+        scriptdata = script[scriptpath]
+        if scriptdata.has_key('args'):
+            args = scriptdata['args']
+        images = scriptdata['img']
         for img in images:
-            fname_to_script[img] = script
+            imgargs = ImgArgs(scriptpath, args, img)
+            fname_to_script[img] = imgargs
 
 def _process_img(imgpath):
     if not fname_to_script.has_key(imgpath):
@@ -54,24 +73,36 @@ def _process_img(imgpath):
         print('=== img already exists, skipping: {}'.format(imgpath))
         return
 
-    scriptrel = fname_to_script[imgpath]
+    imgargs = fname_to_script[imgpath]
+    args = ''
+    if imgargs.args is not None:
+        args = imgargs.args
+
+    scriptrel = imgargs.script
     scriptfull = os.path.join(_get_script_dir(), scriptrel)
     if not os.path.isfile(scriptfull):
         raise Exception(
             'Script does not exist {}'.format(scriptfull))
 
     global processed_scripts
-    if not scriptrel in processed_scripts:
+    if not imgargs.processed_key() in processed_scripts:
         scriptloc, scriptname = os.path.split(scriptfull)
-        cmd = 'export SAVEFIGS=True; python2 {}'.format(scriptname)
+        cmd = 'SAVEFIGS=True python2 {} {}'.format(scriptname, args)
         print('=== running script {}'.format(cmd))
-        subprocess.call(cmd, shell=True, cwd=scriptloc)
+        ret = subprocess.call(cmd, shell=True, cwd=scriptloc)
+
+        if ret is not 0:
+            raise Exception(
+                'Script returned non-zero errcode {}.'.format(ret))
+
+        processed_scripts.add(imgargs.processed_key())
     else:
         print('=== script already run, skipping {}'.format(scriptrel))
 
     if not os.path.isfile(destpath):
         raise Exception(
-            'Image {} was not built by script {}.'.format(imgpath, scriptfull))
+            'Image {} was not built by script {}.'
+            .format(imgpath, scriptfull))
 
 def img(imgpath):
     if fname_to_script is None:
