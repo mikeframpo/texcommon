@@ -24,3 +24,6 @@
 
 # python build files
 *.pyc
+
+# symlink to scripts dir
+script/script
