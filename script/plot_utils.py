@@ -4,12 +4,12 @@ import math
 import os
 import matplotlib as mpl
 
-def _save_enabled():
+def save_enabled():
     if os.environ.has_key('SAVEFIGS'):
         return True
     return False
 
-if _save_enabled():
+if save_enabled():
 
     mpl.use('pgf')
 
@@ -38,30 +38,39 @@ import matplotlib.pyplot as plt
 #mpl.rcParams.update ({'font.size': 7})
 mpl.rcParams['lines.linewidth'] = 1.0
 
-def savefig(fname, fig=None):
-    if _save_enabled():
-        destpath = ''
+def savefig(path, fig=None):
+    dpi=200
+    print('Saving figure to: ' + path)
+    if fig is not None:
+        fig.tight_layout()
+        fig.savefig(path, dpi=dpi)
+    else:
+        plt.tight_layout()
+        plt.savefig(path, dpi=dpi)
+
+def _save_to_genpath(fname, fig=None):
+    if save_enabled():
         genpath = '../imgbuild'
         if os.path.isdir(genpath):
             destpath = genpath
-        path = os.path.join(destpath, fname)
-        dpi=200
-        print('Saving figure to: ' + path)
-        if fig is not None:
-            fig.tight_layout()
-            fig.savefig(path, dpi=dpi)
         else:
-            plt.tight_layout()
-            plt.savefig(path, dpi=dpi)
+            print('WARNING: {} does not exist, saving to working directory'.
+                    format(genpath))
+            destpath = ''
+        path = os.path.join(destpath, fname)
+        savefig(path, fig)
 
-def showsave(fnames, figs=None, block=False):
-    if hasattr(fnames, '__iter__'):
-        assert figs is not None
-        for name, fig in zip(fnames, figs):
-            savefig(name, fig)
-    else:
-        savefig(fnames, figs)
-    if not _save_enabled():
+def showsave(fnames, figs=None, block=False, path=None):
+    if not hasattr(fnames, '__iter__'):
+        fnames = [fnames]
+    if figs is not None:
+        if not hasattr(fnames, '__iter__'):
+            figs = [figs]
+        assert len(fnames) == len(figs)
+    for ii in range(len(fnames)):
+        fig=figs[ii] if figs is not None else None
+        _save_to_genpath(fnames[ii], fig)
+    if not save_enabled():
         plt.show(block=block)
 
 cm_per_inch=2.54
@@ -84,7 +93,7 @@ a4size_inch=(a4pagesize_inch[0] - 2.0*a4margins_inch[0],
 # \usepackage{layouts}
 ieee_col_width = 8.855 / cm_per_inch
 
-if _save_enabled():
+if save_enabled():
     fig_scale = 0.8
 else:
     # the figures are typically a bit small for analysis purposes
