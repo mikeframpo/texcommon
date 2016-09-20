@@ -1,8 +1,12 @@
 
 import os
+import sys
+
+sys.path.append('../script')
+import imgdep
 
 def relitavise(paths):
-    print('Paths===')
+    #print('Paths===')
     for ipath in range(len(paths)):
         if isinstance(paths[ipath], list):
             continue
@@ -48,6 +52,9 @@ print('### from tex: ' + srctex)
 srctex = srctex.lstrip('#')
 env = Environment()
 cmd = env.Command(target, src, 'latexmk -pdf ' + srctex)
+
+for img in imgdep.get_img_deps():
+    Depends(cmd, img)
 
 Clean(cmd, Glob('#/*.bbl'))
 Clean(cmd, Glob('#/*.blg'))
