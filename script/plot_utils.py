@@ -98,7 +98,7 @@ a4size_inch=(a4pagesize_inch[0] - 2.0*a4margins_inch[0],
 ieee_col_width = 8.855 / cm_per_inch
 
 if save_enabled():
-    fig_scale = 0.8
+    fig_scale = 0.9
 else:
     # the figures are typically a bit small for analysis purposes
     fig_scale = 3.0
