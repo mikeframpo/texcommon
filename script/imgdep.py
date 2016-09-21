@@ -34,12 +34,16 @@ processed_scripts = set()
 # which called img()
 imgdeps = {}
 
+savepath = None
+
 def _get_dest_dir():
-    scriptdir = _get_script_dir()
-    imgdir = os.path.join(scriptdir, 'imgbuild')
-    if not os.path.isdir(imgdir):
-        raise Exception('Expected \'imgbuild\' directory in script dir.')
-    return imgdir
+    if savepath is None:
+        raise Exception('Savepath has not been set, call '\
+            + 'imgdep.set_save_path() before calling imgdep.img()')
+    if not os.path.isdir(savepath):
+        raise Exception(
+            'Savepath {} is not a valid directory.'.format(savepath))
+    return savepath
 
 def _get_script_dir():
     scriptdir = os.path.join(
@@ -108,7 +112,7 @@ def _process_img(imgpath):
     global processed_scripts
     if not imgargs.processed_key() in processed_scripts:
         scriptloc, scriptname = os.path.split(scriptfull)
-        cmd = 'SAVEFIGS=True python2 {} {}'.format(scriptname, args)
+        cmd = 'SAVEPATH={} python2 {} {}'.format(savepath, scriptname, args)
         print('=== running script {}'.format(cmd))
         ret = subprocess.call(cmd, shell=True, cwd=scriptloc)
 
@@ -130,6 +134,10 @@ def get_img_deps():
     for imgarg in imgdeps.values():
         img.append(imgarg.get_script_path())
     return img
+
+def set_save_path(path):
+    global savepath
+    savepath = os.path.abspath(path)
 
 def img(imgpath):
     if fname_to_script is None:
