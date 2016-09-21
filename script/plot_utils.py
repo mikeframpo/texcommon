@@ -4,10 +4,15 @@ import math
 import os
 import matplotlib as mpl
 
+def get_save_path():
+    if os.environ.has_key('SAVEPATH'):
+        return os.environ['SAVEPATH']
+    elif os.environ.has_key('SAVEFIGS'):
+        return '../imgbuild'
+    return None
+
 def save_enabled():
-    if os.environ.has_key('SAVEFIGS'):
-        return True
-    return False
+    return get_save_path() is not None
 
 if save_enabled():
 
@@ -49,18 +54,17 @@ def savefig(path, fig=None):
         plt.savefig(path, dpi=dpi)
 
 def _save_to_genpath(fname, fig=None):
-    if save_enabled():
-        genpath = '../imgbuild'
+    genpath = get_save_path()
+    if genpath is not None:
         if os.path.isdir(genpath):
             destpath = genpath
         else:
-            print('WARNING: {} does not exist, saving to working directory'.
+            raise Exception('Savepath {} does not exist'.
                     format(genpath))
-            destpath = ''
         path = os.path.join(destpath, fname)
         savefig(path, fig)
 
-def showsave(fnames, figs=None, block=False, path=None):
+def showsave(fnames, figs=None, block=True, path=None):
     if not hasattr(fnames, '__iter__'):
         fnames = [fnames]
     if figs is not None:
