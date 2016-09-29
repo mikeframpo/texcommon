@@ -130,6 +130,11 @@ def fig_whole_43():
     ydim = xdim * 0.75
     return plt.figure(figsize=(xdim, ydim))
 
+def fig_ieeecol_42():
+    xdim = ieee_col_width * fig_scale
+    ydim = xdim * 0.5
+    return plt.figure(figsize=(xdim, ydim))
+
 def fig_ieeecol_43():
     xdim = ieee_col_width * fig_scale
     ydim = xdim * 0.75
