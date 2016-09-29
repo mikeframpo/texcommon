@@ -63,6 +63,8 @@ def _save_to_genpath(fname, fig=None):
                     format(genpath))
         path = os.path.join(destpath, fname)
         savefig(path, fig)
+    else:
+        assert not save_enabled()
 
 def showsave(fnames, figs=None, block=True, path=None):
     if not hasattr(fnames, '__iter__'):
