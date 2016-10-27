@@ -31,6 +31,7 @@ if save_enabled():
         "xtick.labelsize": 8,
         "ytick.labelsize": 8,
         "figure.figsize": (10.0, 10.0),     # default fig size of 0.9 textwidth
+        "axes.linewidth": 1.5,
         "pgf.preamble": [
             r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
             r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
