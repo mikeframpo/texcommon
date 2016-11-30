@@ -71,7 +71,7 @@ def showsave(fnames, figs=None, block=True, path=None):
     if not hasattr(fnames, '__iter__'):
         fnames = [fnames]
     if figs is not None:
-        if not hasattr(fnames, '__iter__'):
+        if not hasattr(figs, '__iter__'):
             figs = [figs]
         assert len(fnames) == len(figs)
     for ii in range(len(fnames)):
