@@ -5,6 +5,8 @@ import sys
 sys.path.append('../script')
 import imgdep
 
+import mtexrules
+
 def relitavise(paths):
     #print('Paths===')
     for ipath in range(len(paths)):
@@ -15,6 +17,15 @@ def relitavise(paths):
 def replace_ext(srcpath, ext):
     base = os.path.splitext(srcpath)[0]
     return base + '.' + ext
+
+def gen_imgdep_paths(srctex):
+    srctexfull = File(srctex).srcnode().abspath
+    srctexdep = mtexrules.Texfile(srctexfull)
+    gen_img_paths = []
+    for teximg in srctexdep.imagefilenames:
+        genimg = teximg.replace('\\imgdir/gen', imgdep._get_dest_dir())
+        gen_img_paths.append(genimg)
+    return gen_img_paths
 
 Import('*')
 
@@ -44,6 +55,18 @@ if textarget is not None:
 else:
     srctex = src[0]
     target = replace_ext(srctex, 'pdf')
+
+# get the image dependencies for the source tex file
+imgdep_paths = gen_imgdep_paths(srctex)
+
+# generate the images if necessary
+for imgdep_path in imgdep_paths:
+    imgdep_name = os.path.split(imgdep_path)[-1]
+    if imgdep_path.find(imgdep._get_dest_dir()) != -1:
+        print('imgdep:building:\t{}'.format(imgdep_name))
+        imgdep.img(imgdep_name)
+    else:
+        print('imgdep:skipping:\t{}'.format(imgdep_name))
 
 print('### building: ' + target)
 print('### from tex: ' + srctex)

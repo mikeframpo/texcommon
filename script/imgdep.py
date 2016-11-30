@@ -47,7 +47,7 @@ def _get_dest_dir():
 
 def _get_script_dir():
     scriptdir = os.path.join(
-                    os.path.dirname(os.path.realpath(__file__)),
+                    os.path.dirname(imgdir_path),
                     'script')
     if not os.path.islink(scriptdir):
         raise Exception('Expected symlink \'script\' in texcommon/script'\
@@ -138,6 +138,13 @@ def get_img_deps():
 def set_save_path(path):
     global savepath
     savepath = os.path.abspath(path)
+
+    # the __file__ variable is a rel path to this script, relative to the 
+    # place this was imported from. This means that __file__ can no longer
+    # be used when the working directly later changes, as occurs when
+    # working in an SConscript file.
+    global imgdir_path
+    imgdir_path = os.path.abspath(__file__)
 
 def img(imgpath):
     if fname_to_script is None:
