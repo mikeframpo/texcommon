@@ -71,7 +71,7 @@ def showsave(fnames, figs=None, block=True, path=None):
     if not hasattr(fnames, '__iter__'):
         fnames = [fnames]
     if figs is not None:
-        if not hasattr(fnames, '__iter__'):
+        if not hasattr(figs, '__iter__'):
             figs = [figs]
         assert len(fnames) == len(figs)
     for ii in range(len(fnames)):
@@ -93,6 +93,13 @@ a4margins_inch=(2.0/cm_per_inch, 3.0/cm_per_inch)
 # side to get the available page space
 a4size_inch=(a4pagesize_inch[0] - 2.0*a4margins_inch[0],
                 a4pagesize_inch[1] - 2.0*a4margins_inch[1])
+
+beamerpagesize_inch=(12.8/cm_per_inch, 9.6/cm_per_inch)
+
+beamermargins_inch=(1.54/cm_per_inch, 0.064/cm_per_inch)
+
+beamersize_inch=(beamerpagesize_inch[0] - 2.0*beamermargins_inch[0],
+                beamerpagesize_inch[1] - 2.0*beamermargins_inch[1])
 
 # this width was found using the following commands
 #
@@ -146,6 +153,12 @@ def fig_half_43():
     ydim = xdim * 0.75
     return plt.figure(figsize=(xdim, ydim))
 
+def fig_beamer_41():
+    xdim = beamersize_inch[0] * fig_scale
+    ydim = xdim / 4.0
+    print("{}, {}".format(xdim, ydim))
+    return plt.figure(figsize=(xdim, ydim))
+
 def fig_whole_40p():
     return plt.figure(figsize=(a4size_inch[0], a4size_inch[1]*0.4))
 
@@ -154,12 +167,15 @@ def fig_6x6():
 
 def plt_sig(sig, title=None, label=None, fmt=None, xmin=None, xmax=None,
             kwargs=None, fname=None, t=None, tscale=1e6, legloc=None,
-            xlim=None, ylim=None):
+            xlim=None, ylim=None, xlabel='Time ($\mu \; s$',
+            ylabel='Voltage ($V$)'):
 
     if title is not None:
         plt.title(title)
-    plt.xlabel('Time (us)')
-    plt.ylabel('Voltage (V)')
+    if xlabel is not None:
+        plt.xlabel(xlabel)
+    if ylabel is not None:
+        plt.ylabel(ylabel)
     plt.grid(True)
     if kwargs is None:
         kwargs = { }
