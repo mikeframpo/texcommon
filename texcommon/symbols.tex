@@ -3,18 +3,21 @@
 \newcommand{\bulk}{K}
 \newcommand{\compl}{S}
 \newcommand{\damp}{\eta}
-\newcommand{\deform}{\Delta^{\prime}}		%deformation scalar field, Auld pp9
+\newcommand{\deform}{\Delta^{\prime}}			%deformation scalar field, Auld pp9
 \newcommand{\dens}{\rho}
-\newcommand{\disp}{u}						%particle displacement, Auld pp2
+\newcommand{\disp}{u}							%particle displacement, Auld pp2
 \newcommand{\dispv}{\boldsymbol{\disp}}			%particle displacement vector
 \newcommand{\force}{F}
+\newcommand{\forcev}{\boldsymbol{\force}}
 \newcommand{\mass}{m}
 \newcommand{\moe}{E}
 \newcommand{\newtons}{N}
-\newcommand{\posequ}{L}						%particle equilibrium pos, Auld pp2
-\newcommand{\posequv}{\boldsymbol{\posequ}}
-\newcommand{\posdisp}{\ell}					%particle displacement pos, Auld pp2
-\newcommand{\posdispv}{\boldsymbol{\posdisp}}
+\newcommand{\pos}{L}							%particle equilibrium pos, Auld pp2
+\newcommand{\posv}{\boldsymbol{\pos}}
+\newcommand{\posd}{\ell}						%particle displacement pos, Auld pp2
+\newcommand{\posdv}{\boldsymbol{\posd}}
+\newcommand{\stiff}{c}							%stiffness
+\newcommand{\stifft}{\boldsymbol{\stiff}}		%stiffness tensor
 \newcommand{\stress}{\sigma}
 \newcommand{\stressv}{\boldsymbol{\stress}}
 \newcommand{\strain}{\epsilon}
@@ -48,9 +51,10 @@
 % === Acoustics ===
 \newcommand{\Pres}{P}
 \newcommand{\pres}{p}
+\newcommand{\piston}{r}
+\newcommand{\source}{S}
 \newcommand{\Velo}{U}
 \newcommand{\velo}{u}
-\newcommand{\piston}{r}
 \newcommand{\Zzero}{\imped_{0}}
 
 % === Misc physics ===
@@ -58,12 +62,18 @@
 \newcommand{\temp}{T}
 
 % === Misc math ===
+\newcommand{\ident}{\boldsymbol{I}}			% identity tensor
 \newcommand{\im}{j}							%sqrt(-1)
+\newcommand{\greens}{\delta}
 \newcommand{\laps}{s}						%laplace s
 \newcommand{\lapl}{\nabla^{2}}				%the laplacian operator
-\newcommand{\xunit}{\boldsymbol{\hat{\mathrm{x}}}}
-\newcommand{\yunit}{\boldsymbol{\hat{\mathrm{y}}}}
-\newcommand{\zunit}{\boldsymbol{\hat{\mathrm{z}}}}
+	
+ % == Unit vectors ==
+\newcommand{\xunit}{\unitv{\mathrm{x}}}
+\newcommand{\yunit}{\unitv{\mathrm{y}}}
+\newcommand{\zunit}{\unitv{\mathrm{z}}}
+\newcommand{\iunit}{\unitv{i}}
+\newcommand{\junit}{\unitv{j}}
 
 % === Electrical circuits ===
 \newcommand{\capac}{C}
