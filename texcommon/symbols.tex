@@ -53,7 +53,7 @@
 \newcommand{\propcoeffreal}{\alpha}
 \newcommand{\propcoeffimag}{\wavenum}
 \newcommand{\prop}{g}						%propagation vector
-\newcommand{\propv}{\boldsymbol{\prop}}
+\newcommand{\propv}{\unitv{\prop}}
 \newcommand{\refc}{\Gamma}					%reflection coeff
 \newcommand{\harm}{n}						%harmonic number (an integer)
 \newcommand{\tprop}{\tau}					%propagation time
@@ -61,6 +61,7 @@
 \newcommand{\wavesolnn}{g}					%wave solution, negative travelling
 \newcommand{\waveamplp}{A}					%wave amplitude, pve-going
 \newcommand{\waveampln}{B}					%wave amplitude, nve-going
+\newcommand{\christoffel}{\Gamma}
 
 % === Acoustics ===
 \newcommand{\Pres}{P}
@@ -88,11 +89,11 @@
 \newcommand{\xax}{\mathrm{x}}
 \newcommand{\yax}{\mathrm{y}}
 \newcommand{\zax}{\mathrm{z}}
-\newcommand{\xunit}{\unitv{\xax}}
-\newcommand{\yunit}{\unitv{\yax}}
-\newcommand{\zunit}{\unitv{\zax}}
-\newcommand{\iunit}{\unitv{i}}
-\newcommand{\junit}{\unitv{j}}
+\newcommand{\xunit}{\axisv{\xax}}
+\newcommand{\yunit}{\axisv{\yax}}
+\newcommand{\zunit}{\axisv{\zax}}
+\newcommand{\iunit}{\axisv{i}}
+\newcommand{\junit}{\axisv{j}}
 
 % === Electrical circuits ===
 \newcommand{\capac}{C}
