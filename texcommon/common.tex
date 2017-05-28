@@ -44,7 +44,7 @@
 \newcommand{\needcite}{\emph{(NEED CITE)}}
 
 % === Mathematical expressions ===
-\DeclarePairedDelimiter{\encp}{(}{)}
+\newcommand{\encp}[1]{\left(#1\right)}			%enclose in square brackets
 \newcommand{\encs}[1]{\left[#1\right]}			%enclose in square brackets
 \newcommand{\expp}[1]{\exp{\encp{#1}}}
 \newcommand{\real}[1]{\operatorname{Re}(#1)}
