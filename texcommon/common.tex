@@ -39,6 +39,16 @@
 \acrodef{WSN}{Wireless sensor network}
 \acrodef{WTT}{Wireless Treetap}
 
+\newcommand{\defsymg}[3]{
+	\newglossaryentry{#1}{
+		name={\ensuremath{#2}},
+		description={#3},
+		sort={#1}
+	}
+	\csdef{#1}{\gls{#1}}
+}
+
+
 % === Development options ===
 \newcommand{\mcomm}[1]{\emph{(#1)}}				%comment in brackets
 \newcommand{\needcite}{\emph{(NEED CITE)}}
