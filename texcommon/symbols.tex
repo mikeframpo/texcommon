@@ -32,46 +32,46 @@
 \defsymg{volume}{V}{Volume}
 \defsymg{youngs}{E}{Young's modulus}
 
-
 \newcommand{\shear}{G}
 
 %	== Lame params ==
-\newcommand{\poissons}{\nu}
-\newcommand{\lameelas}{\lambda}
-\newcommand{\lameelascompres}{\lameelas_{1}}
-\newcommand{\lameelasvisc}{\lambda_{2}}
-\newcommand{\lameshear}{\mu}
-\newcommand{\lameshearcompres}{\lameshear_{1}}
-\newcommand{\lameshearvisc}{\lameshear_{2}}
+\defsymg{poissons}{\nu}{Poisson's ratio}
+\defsymg{lameelas}{\lambda}{\lame{}'s first parameter}
+\defsymg{lameelascompres}{\lameelas_{1}}{}
+\defsymg{lameelasvisc}{\lambda_{2}}{}
+\defsymg{lameshear}{\mu}{\lame{}'s second parameter}
+\defsymg{lameshearcompres}{\lameshear_{1}}{}
+\defsymg{lameshearvisc}{\lameshear_{2}}{}
 
 % === Waves ===
-\newcommand{\christ}{\gamma}
-\newcommand{\christm}{\boldsymbol{\Gamma}}
-\newcommand{\energy}{u}
-\newcommand{\harm}{n}						%harmonic number (an integer)
-\newcommand{\len}{L}						%length of an object e.g. log
-\newcommand{\lonlen}{z}						%longitudinal length (displacement)
-\newcommand{\propcoeff}{\gamma}
-\newcommand{\propcoeffreal}{\alpha}
+\defsymg{christ}{\gamma}{Christoffel matrix component}
+\defsymg{christm}{\boldsymbol{\Gamma}}{Christoffel matrix}
+\defsymg{energy}{u}{Energy}
+\defsymg{harm}{n}{Harmonic number}
+\defsymg{len}{L}{Length}
+\defsymg{lonlen}{z}{Longitudinal length}
+\defsymg{propcoeff}{\gamma}{Propagation coefficient}
+\defsymg{propcoeffreal}{\alpha}{Real part of propagation coefficient}
 \newcommand{\propcoeffimag}{\wavenum}
-\newcommand{\prop}{n}						%propagation vector
-\newcommand{\propv}{\unitv{\prop}}
-\newcommand{\poynting}{\boldsymbol{P}}
-\newcommand{\refc}{\Gamma}					%reflection coeff
-\newcommand{\tprop}{\tau}					%propagation time
-\newcommand{\velop}{c}						%phase velocity
-\newcommand{\velo}{v}
-\newcommand{\veloev}{\boldsymbol{\velo}_{e}}%energy velocity vector
-\newcommand{\velog}{\velo_{g}}				%group velocity
-\newcommand{\velogv}{\boldsymbol{\velo}_{g}}
-\newcommand{\waveamplp}{A}					%wave amplitude, pve-going
-\newcommand{\waveampln}{B}					%wave amplitude, nve-going
-\newcommand{\wavelen}{\lambda}
-\newcommand{\wavenum}{k}
-\newcommand{\wavenumv}{\boldsymbol{\wavenum}}
-\newcommand{\wavenumdir}{\unitv{\wavenum}}
-\newcommand{\wavesolnp}{f}					%wave solution, positive travelling
-\newcommand{\wavesolnn}{g}					%wave solution, negative travelling
+\defsymg{prop}{n}{Component of propagation-direction vector}
+\defsymg{propv}{\unitv{\prop}}{Propagation-direction vector}
+\defsymg{poynting}{\boldsymbol{P}}{Poynting vector}
+\defsymg{refc}{\Gamma}{Reflection coefficient}
+\defsymg{tprop}{\tau}{Propagation time}
+\defsymg{velop}{c}{Phase speed}
+\defsymg{velo}{v}{Speed (TODO: specify better)}
+\defsymg{veloev}{\boldsymbol{\velo}_{e}}{Energy velocity}
+\defsymg{velog}{\velo_{g}}{Group speed}
+\defsymg{velogv}{\boldsymbol{\velo}_{g}}{Group velocity}
+\defsymg{waveamplp}{A}{Wave amplitude}
+\defsymg{waveampln}{B}{Wave amplitude}
+\defsymg{wavelen}{\lambda}{Wavelength}
+\defsymg{wavenum}{k}{Wave number}
+\defsymg{wavenumv}{\boldsymbol{\wavenum}}{Wave vector}
+\defsymg{wavenumdir}{\unitv{\wavenum}}{Direction of wave vector}
+\defsymg{wavesolnp}{f}{Solution to wave equation}
+\defsymg{wavesolnn}{g}{Solution to wave equation}
+
 \newcommand{\z}{\lonlen}					%convenience symbol
 
 % === Acoustics ===
@@ -97,9 +97,9 @@
 \newcommand{\tensprodfourth}{\boldsymbol{:}}%fourth-order tensor product: Auld pp63
 	
  % == Unit vectors ==
-\newcommand{\xax}{\mathrm{x}}
-\newcommand{\yax}{\mathrm{y}}
-\newcommand{\zax}{\mathrm{z}}
+\newcommand{\xax}{x}
+\newcommand{\yax}{y}
+\newcommand{\zax}{z}
 \defsymg{xunit}{\axisv{\xax}}{x-direction unit vector}
 \defsymg{yunit}{\axisv{\yax}}{y-direction unit vector}
 \defsymg{zunit}{\axisv{\zax}}{z-direction unit vector}
