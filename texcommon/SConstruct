@@ -79,8 +79,9 @@ srctex = srctex.lstrip('#')
 env = Environment()
 cmd = env.Command(target, src, 'latexmk -pdf ' + srctex)
 
-for img in imgdep.get_img_deps():
-    Depends(cmd, img)
+for imgarg in imgdep.get_img_deps():
+    Depends(cmd, imgarg.get_script_path())
+    Depends(cmd, imgarg.get_dest_path())
 
 Clean(cmd, Glob('#/*.pdf'))
 Clean(cmd, Glob('#/*.bbl'))

@@ -132,7 +132,7 @@ def _process_img(imgpath):
 def get_img_deps():
     img = []
     for imgarg in imgdeps.values():
-        img.append(imgarg.get_script_path())
+        img.append(imgarg)
     return img
 
 def set_save_path(path):
