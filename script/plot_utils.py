@@ -113,6 +113,18 @@ else:
     # the figures are typically a bit small for analysis purposes
     fig_scale = 3.0
 
+def puFig(f):
+
+    def create_fig():
+        xdim, ydim = f()
+        return plt.figure(figsize=(xdim * fig_scale,
+                                    ydim * fig_scale))
+
+    if not save_enabled():
+        return plt.figure
+    else:
+        return create_fig
+
 def fig_thirdpage():
     return plt.figure(figsize=(14, 6))
 
@@ -130,37 +142,45 @@ def fig_quarterpage():
 #   40p indicates that a dimension takes up 40% of the space
 
 # four of these plots fit vertically, each spanning the width of the page
+@puFig
 def fig_whole_quarter():
-    return plt.figure(figsize=(a4size_inch[0], a4size_inch[1]/4))
+    return a4size_inch[0], a4size_inch[1]/4
 
+@puFig
 def fig_whole_43():
-    xdim = a4size_inch[0] * fig_scale
+    xdim = a4size_inch[0]
     ydim = xdim * 0.75
-    return plt.figure(figsize=(xdim, ydim))
+    return xdim, ydim
 
+@puFig
 def fig_ieeecol_42():
-    xdim = ieee_col_width * fig_scale
+    xdim = ieee_col_width
     ydim = xdim * 0.5
-    return plt.figure(figsize=(xdim, ydim))
+    return xdim, ydim
 
+@puFig
 def fig_ieeecol_43():
-    xdim = ieee_col_width * fig_scale
+    xdim = ieee_col_width
     ydim = xdim * 0.75
-    return plt.figure(figsize=(xdim, ydim))
+    return xdim, ydim
 
+@puFig
 def fig_half_43():
-    xdim = a4size_inch[0]/2 * fig_scale
+    xdim = a4size_inch[0]/2
     ydim = xdim * 0.75
-    return plt.figure(figsize=(xdim, ydim))
+    return xdim, ydim
 
+@puFig
 def fig_beamer_41():
-    xdim = beamersize_inch[0] * fig_scale
+    xdim = beamersize_inch[0]
     ydim = xdim / 4.0
-    print("{}, {}".format(xdim, ydim))
-    return plt.figure(figsize=(xdim, ydim))
+    return xdim, ydim
 
+@puFig
 def fig_whole_40p():
-    return plt.figure(figsize=(a4size_inch[0], a4size_inch[1]*0.4))
+    xdim = a4size_inch[0]
+    ydim = a4size_inch[1]*0.4
+    return xdim, ydim
 
 def fig_6x6():
     return plt.figure(figsize=(6.0, 6.0))
