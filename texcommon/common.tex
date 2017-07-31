@@ -3,12 +3,17 @@
 
 % === Acronyms, alphabetical ===
 \acrodef{ADC}{Analogue to Digital Converter}
+\acrodef{AE}{Acoustic Emission}
 \acrodef{AIC}{Akaike information criteria}
 \acrodef{API}{Application Programming Interface}
+\acrodef{AWGN}{Additive White Gaussean Noise}
+\acrodef{CDF}{cumulative distribution function}
+\acrodef{CRLB}{Cram\'{e}r-Rao lower bound}
 \acrodef{DFT}{Discrete Fourier Transform}
 \acrodef{ECE}{Electrical and Computer Engineering}
 \acrodef{EM}{electromagnetic}
 \acrodef{FFT}{fast Fourier Transform}
+\acrodef{FIR}{Finite Impulse Response}
 \acrodef{FTSP}{Flooding Time Synchronisation Protocol}
 \acrodef{GF}{growth and form}
 \acrodef{GPS}{Global Positioning System}
@@ -17,17 +22,20 @@
 \acrodef{mbps}{megabit per second}
 \acrodef{MCU}{microcontroller unit}
 \acrodef{MFA}{Microfibril angle}
+\acrodef{ML}{maximum likelihood}
 \acrodef{MoE}{Modulus of Elasticity}
 \acrodef{MVA}{Multivariate analysis}
 \acrodef{NIR}{Near-infrared}
 \acrodef{NZSoF}{New Zealand School of Forestry}
 \acrodef{PCB}{printed circuit board}
+\acrodef{PDF}{probability distribution function}
 \acrodef{PDS}{passive data structure} 
 \acrodef{PGA}{Programmable Gain Amplifier}
 \acrodef{ppm}{parts per million}
 \acrodef{PPS}{Pulse Per Second}
 \acrodef{PSD}{Power Spectral Density}
 \acrodef{RMS}{Root Mean Square}
+\acrodef{RV}{Random Variable}
 \acrodef{SNR}{Signal to Noise Ratio}
 \acrodef{TC}{timer-counter}
 \acrodef{TCXO}{temperature-controlled crystal oscillator}
@@ -39,6 +47,18 @@
 \acrodef{WSN}{Wireless sensor network}
 \acrodef{WTT}{Wireless Treetap}
 
+\newcommand{\defsymg}[3]{
+	\newglossaryentry{#1}{
+		name={\ensuremath{#2}},
+		description={#3},
+		sort={#1}
+	}
+	\csdef{#1}{\gls{#1}}
+}
+
+% === Text conveniences
+\newcommand{\lame}{Lam\'{e}}
+
 % === Development options ===
 \newcommand{\mcomm}[1]{\emph{(#1)}}				%comment in brackets
 \newcommand{\needcite}{\emph{(NEED CITE)}}
@@ -49,6 +69,7 @@
 \newcommand{\expp}[1]{\exp{\encp{#1}}}
 \newcommand{\real}[1]{\operatorname{Re}(#1)}
 \newcommand{\imag}[1]{\operatorname{Im}(#1)}
+\newcommand{\conj}[1]{#1^{\ast}}
 \newcommand{\spunit}{\,}						%spacing between value and it's unit
 
 %%% NOTE: commath defines the \pd macro for partial derivatives
@@ -60,7 +81,7 @@
 
 \DeclareMathOperator{\Tr}{Tr}
 \newcommand{\unitv}[1]{\boldsymbol{\hat{#1}}}
-\newcommand{\axisv}[1]{\boldsymbol{\hat{e_{#1}}}}
+\newcommand{\axisv}[1]{\boldsymbol{\hat{e}_{#1}}}
 \newcommand{\diverg}[1]{\nabla \cdot #1}
 \newcommand{\symdiv}{\nabla_{\mathrm{s}}}						%symmetric vector derivative
 

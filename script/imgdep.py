@@ -43,7 +43,7 @@ def _get_dest_dir():
     if not os.path.isdir(savepath):
         raise Exception(
             'Savepath {} is not a valid directory.'.format(savepath))
-    return savepath
+    return os.path.realpath(savepath)
 
 def _get_script_dir():
     scriptdir = os.path.join(
@@ -52,7 +52,7 @@ def _get_script_dir():
     if not os.path.islink(scriptdir):
         raise Exception('Expected symlink \'script\' in texcommon/script'\
                 + ' dir pointing to root of image script dir.')
-    return scriptdir
+    return os.path.realpath(scriptdir)
 
 def _load_image_deps():
     scriptdir = _get_script_dir()
@@ -132,7 +132,7 @@ def _process_img(imgpath):
 def get_img_deps():
     img = []
     for imgarg in imgdeps.values():
-        img.append(imgarg.get_script_path())
+        img.append(imgarg)
     return img
 
 def set_save_path(path):
