@@ -3,6 +3,8 @@ import os
 import json
 import subprocess
 
+SCRIPT_PDFTEX = 'pdf_tex'
+
 class ImgArgs:
 
     def __init__(self, script, args, img):
@@ -11,13 +13,37 @@ class ImgArgs:
         self.img = img
     
     def processed_key(self):
-        key = self.script
-        if self.args is not None:
-            key += '_' + self.args
-        return key
+        if self.is_py_script():
+            key = self.script
+            if self.args is not None:
+                key += '_' + self.args
+            return key
+        elif self.is_pdftex_script():
+            return SCRIPT_PDFTEX + '_' + self.img
+        else:
+            raise Exception('Unknown script type')
+
+    def is_py_script(self):
+        return os.path.splitext(self.script)[1] == '.py'
+
+    def is_pdftex_script(self):
+        return self.script == SCRIPT_PDFTEX
 
     def get_script_path(self):
+        if self.is_pdftex_script():
+            raise Exception('pdf_tex does not call a script')
         return os.path.join(_get_script_dir(), self.script)
+
+    def get_src_paths(self):
+        '''returns a list of all known files which the resulting image
+        depends on.'''
+        src = [self.get_dest_path()]
+        if self.is_py_script():
+            src.append(self.get_script_path())
+        elif self.is_pdftex_script():
+            imgbase = os.path.splitext(self.img)[0]
+            src.append(os.path.join(_get_dest_dir(), '../', imgbase + '.svg'))
+        return src
 
     def get_dest_path(self):
         return os.path.join(_get_dest_dir(), self.img)
@@ -84,10 +110,11 @@ def _get_img_args(imgpath):
             'Image {} was not found in imgdeps file.'.format(imgpath))
 
     imgargs = fname_to_script[imgpath]
-    scriptfull = imgargs.get_script_path()
-    if not os.path.isfile(scriptfull):
-        raise Exception(
-            'Script does not exist {}'.format(scriptfull))
+    if imgargs.is_py_script():
+        scriptfull = imgargs.get_script_path()
+        if not os.path.isfile(scriptfull):
+            raise Exception(
+                'Script does not exist {}'.format(scriptfull))
     return imgargs
 
 def _add_img_dep(imgpath):
@@ -107,19 +134,26 @@ def _process_img(imgpath):
         print('=== img already exists, skipping: {}'.format(imgpath))
         return
 
-    scriptfull = imgargs.get_script_path()
-
     global processed_scripts
     if not imgargs.processed_key() in processed_scripts:
-        scriptloc, scriptname = os.path.split(scriptfull)
-        cmd = 'SAVEPATH={} python2 {} {}'.format(savepath, scriptname, args)
-        print('=== running script {}'.format(cmd))
-        ret = subprocess.call(cmd, shell=True, cwd=scriptloc)
+
+        if imgargs.is_py_script():
+            scriptfull = imgargs.get_script_path()
+            scriptloc, scriptname = os.path.split(scriptfull)
+            cmd = 'SAVEPATH={} python2 {} {}'.format(savepath, scriptname, args)
+            print('=== running script {}'.format(cmd))
+            ret = subprocess.call(cmd, shell=True, cwd=scriptloc)
+
+        if imgargs.is_pdftex_script():
+            imgbase = os.path.splitext(imgargs.img)[0]
+            cmd = 'inkscape -D -z --file=../%s.svg --export-pdf=%s.pdf --export-latex'\
+                    % (imgbase, imgbase)
+            print('=== running script %s' % cmd)
+            ret = subprocess.call(cmd, shell=True, cwd=_get_dest_dir())
 
         if ret is not 0:
             raise Exception(
                 'Script returned non-zero errcode {}.'.format(ret))
-
         processed_scripts.add(imgargs.processed_key())
     else:
         print('=== script already run, skipping {}'.format(imgargs.script))
@@ -127,7 +161,7 @@ def _process_img(imgpath):
     if not os.path.isfile(destpath):
         raise Exception(
             'Image {} was not built by script {}.'
-            .format(imgpath, scriptfull))
+            .format(imgpath, imgargs.script))
 
 def get_img_deps():
     img = []

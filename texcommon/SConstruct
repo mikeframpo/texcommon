@@ -24,8 +24,12 @@ def replace_ext(srcpath, ext):
 def gen_imgdep_paths(srctex):
     srctexfull = File(srctex).srcnode().abspath
     srctexdep = mtexrules.Texfile(srctexfull)
+    teximgpaths = []
+    teximgpaths.extend(srctexdep.imagefilenames)
+    teximgpaths.extend(srctexdep.importfilenames)
     gen_img_paths = []
-    for teximg in srctexdep.imagefilenames:
+    #import pdb; pdb.set_trace()
+    for teximg in teximgpaths:
         genimg = teximg.replace('\\imgdir/gen', imgdep._get_dest_dir())
         gen_img_paths.append(genimg)
     return gen_img_paths
@@ -80,8 +84,8 @@ env = Environment()
 cmd = env.Command(target, src, 'latexmk -pdf ' + srctex)
 
 for imgarg in imgdep.get_img_deps():
-    Depends(cmd, imgarg.get_script_path())
-    Depends(cmd, imgarg.get_dest_path())
+    for imgsrc in imgarg.get_src_paths():
+        Depends(cmd, imgsrc)
 
 Clean(cmd, Glob('#/*.pdf'))
 Clean(cmd, Glob('#/*.bbl'))
