@@ -87,7 +87,7 @@ def get_fig(key):
     elif key == 'fig_whole_43':
         return fig_whole_43()
     else:
-        raise Exception('Unknown figure key')
+        raise Exception('Unknown figure key %s' % key)
 
 cm_per_inch=2.54
 
