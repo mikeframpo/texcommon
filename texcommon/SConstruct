@@ -100,4 +100,8 @@ Clean(cmd, Glob('#/*.ist'))
 Clean(cmd, Glob('#/*.xdy'))
 Clean(cmd, Glob('#/*.aux'))
 Clean(cmd, Glob('#/*.toc'))
+Clean(cmd, Glob('#/*.out'))
+Clean(cmd, Glob('#/*.idx'))
+Clean(cmd, Glob('#/*.ilg'))
+Clean(cmd, Glob('#/*.ind'))
 
