@@ -146,7 +146,7 @@ def _process_img(imgpath):
 
         if imgargs.is_pdftex_script():
             imgbase = os.path.splitext(imgargs.img)[0]
-            cmd = 'inkscape -D -z --file=../%s.svg --export-pdf=%s.pdf --export-latex'\
+            cmd = 'inkscape -C -z --file=../%s.svg --export-pdf=%s.pdf --export-latex'\
                     % (imgbase, imgbase)
             print('=== running script %s' % cmd)
             ret = subprocess.call(cmd, shell=True, cwd=_get_dest_dir())

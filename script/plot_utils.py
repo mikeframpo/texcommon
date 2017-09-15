@@ -112,8 +112,9 @@ beamersize_inch=(beamerpagesize_inch[0] - 2.0*beamermargins_inch[0],
 
 # this width was found using the following commands
 #
-# \printinunitsof{cm}\prntlen{\columnwidth}
 # \usepackage{layouts}
+# ...
+# \printinunitsof{cm}\prntlen{\columnwidth}
 ieee_col_width = 8.855 / cm_per_inch
 
 if save_enabled():
