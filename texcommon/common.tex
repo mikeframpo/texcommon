@@ -25,6 +25,7 @@
 \acrodef{LiPo}{Lithium Polymer}
 \acrodef{LED}{light emitting diode}
 \acrodef{LPF}{lowpass filter}
+\acrodef{LTI}{linear, time-invariant}
 \acrodef{mbps}{megabit per second}
 \acrodef{MCU}{microcontroller unit}
 \acrodef{MFA}{Microfibril angle}
@@ -74,11 +75,12 @@
 \newcommand{\needcite}{\emph{(NEED CITE)}}
 
 % === Mathematical expressions ===
-\newcommand{\encp}[1]{\left(#1\right)}			%enclose in square brackets
+\newcommand{\encp}[1]{\left(#1\right)}			%enclose in brackets
 \newcommand{\encs}[1]{\left[#1\right]}			%enclose in square brackets
+\newcommand{\encc}[1]{\left\{#1\right\}}			%enclose in curly braces
 \newcommand{\expp}[1]{\exp{\encp{#1}}}
-\newcommand{\real}[1]{\operatorname{Re}(#1)}
-\newcommand{\imag}[1]{\operatorname{Im}(#1)}
+\newcommand{\real}[1]{\operatorname{Re}\encc{#1}}
+\newcommand{\imag}[1]{\operatorname{Im}\encc{#1}}
 \newcommand{\conj}[1]{#1^{\ast}}
 \newcommand{\spunit}{\,}						%spacing between value and its unit
 \newcommand{\scinote}[1]{\times 10^{#1}}
