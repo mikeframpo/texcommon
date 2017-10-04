@@ -49,10 +49,10 @@ def savefig(path, fig=None):
     print('Saving figure to: ' + path)
     if fig is not None:
         fig.tight_layout()
-        fig.savefig(path, dpi=dpi)
+        fig.savefig(path, dpi=dpi, bbox_inches='tight', pad_inches=0)
     else:
         plt.tight_layout()
-        plt.savefig(path, dpi=dpi)
+        plt.savefig(path, dpi=dpi, bbox_inches='tight', pad_inches=0)
 
 def _save_to_genpath(fname, fig=None):
     genpath = get_save_path()
@@ -165,6 +165,12 @@ def fig_ieeecol_42():
 def fig_ieeecol_43():
     xdim = ieee_col_width
     ydim = xdim * 0.75
+    return xdim, ydim
+
+@puFig
+def fig_ieeecol_square():
+    xdim = ieee_col_width
+    ydim = xdim
     return xdim, ydim
 
 @puFig
