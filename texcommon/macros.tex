@@ -1,4 +1,5 @@
 
+% Macros from background
 \newcommand{\dispvf}{\dispv(\posv, t)}
 \newcommand{\dispvg}{\nabla \dispv}
 \newcommand{\dispvgt}{\overline{\dispvg}}
@@ -31,4 +32,9 @@
 		\stressmatrixline{z} \\
 	\end{bmatrix}
 }
+
+% Macros from wtreetap
+\newcommand{\qshalf}{\quanstep / 2}
+\newcommand{\quanterrorlims}{-\qshalf < \errn < \qshalf}
+\newcommand{\quantnoiserms}{\frac{\quanstep}{\sqrt{12 \band}}}
 
