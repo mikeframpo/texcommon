@@ -24,9 +24,17 @@ def replace_ext(srcpath, ext):
 def gen_imgdep_paths(srctex):
     srctexfull = File(srctex).srcnode().abspath
     srctexdep = mtexrules.Texfile(srctexfull)
+
     teximgpaths = []
     teximgpaths.extend(srctexdep.imagefilenames)
     teximgpaths.extend(srctexdep.importfilenames)
+
+    for subfile in srctexdep.subfilenames:
+        subfilefull = File('#' + subfile).srcnode().abspath
+        subfiletexdep = mtexrules.Texfile(subfilefull)
+        teximgpaths.extend(subfiletexdep.imagefilenames)
+        teximgpaths.extend(subfiletexdep.importfilenames)
+
     gen_img_paths = []
     #import pdb; pdb.set_trace()
     for teximg in teximgpaths:

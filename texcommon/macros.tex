@@ -1,0 +1,34 @@
+
+\newcommand{\dispvf}{\dispv(\posv, t)}
+\newcommand{\dispvg}{\nabla \dispv}
+\newcommand{\dispvgt}{\overline{\dispvg}}
+\newcommand{\dispvgsym}{\symdiv \dispv}
+\newcommand{\divergvoigt}{\nabla_{iJ}}
+\newcommand{\diffsymvoigt}{\nabla_{Kl}}
+%
+\newcommand{\posvf}{\posdv(\posv, t)}
+
+\newcommand{\strainmatrixline}[1]{\strain_{#1 x} & \strain_{#1 y} & \strain_{#1 z}}
+\newcommand{\strainij}{\strain_{ij}}
+\newcommand{\strainijf}{\strainij (\posv, t)}
+
+\newcommand{\strainlin}{
+	\strainijf &=
+		\frac{1}{2}
+		\encp{
+			\pd{\disp_{i}}{\pos_{j}} + 
+			\pd{\disp_{j}}{\pos_{i}}
+		}
+	}
+
+\newcommand{\stressdiv}{\diverg{\stresst}}
+
+\newcommand{\stressmatrixline}[1]{\stress_{#1 x} & \stress_{#1 y} & \stress_{#1 z}}
+\newcommand{\stressmatrix}{
+	\begin{bmatrix}
+		\stressmatrixline{x} \\
+		\stressmatrixline{y} \\
+		\stressmatrixline{z} \\
+	\end{bmatrix}
+}
+
