@@ -76,18 +76,19 @@
 \newcommand{\needcite}{\emph{(NEED CITE)}}
 
 % === Mathematical expressions ===
+\newcommand{\conj}[1]{#1^{\ast}}
 \newcommand{\encp}[1]{\left(#1\right)}			%enclose in brackets
 \newcommand{\encs}[1]{\left[#1\right]}			%enclose in square brackets
 \newcommand{\encc}[1]{\left\{#1\right\}}			%enclose in curly braces
 \newcommand{\expp}[1]{\exp{\encp{#1}}}
+\newcommand{\imag}[1]{\operatorname{Im}\encc{#1}}
 \newcommand{\maxval}[1]{\mathrm{max}\encp{#1}}
 \newcommand{\real}[1]{\operatorname{Re}\encc{#1}}
-\newcommand{\imag}[1]{\operatorname{Im}\encc{#1}}
-\newcommand{\conj}[1]{#1^{\ast}}
 \newcommand{\spunit}{\,}						%spacing between value and its unit
 \newcommand{\scinote}[1]{\times 10^{#1}}
-\newcommand{\unit}[1]{\spunit \mathrm{#1}}
 \newcommand{\tun}[1]{\spunit#1}
+\newcommand{\transp}[1]{#1^{\mathbf{T}}}
+\newcommand{\unit}[1]{\spunit \mathrm{#1}}
 
 %%% NOTE: commath defines the \pd macro for partial derivatives
 %%%	TODO: eliminate these derivate macros in favour of commath.
