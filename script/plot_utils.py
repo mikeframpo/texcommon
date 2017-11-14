@@ -42,7 +42,7 @@ if save_enabled():
 import matplotlib.pyplot as plt
 
 #mpl.rcParams.update ({'font.size': 7})
-mpl.rcParams['lines.linewidth'] = 2.0
+mpl.rcParams['lines.linewidth'] = 1.0
 
 def savefig(path, fig=None):
     dpi=200
