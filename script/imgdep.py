@@ -34,20 +34,29 @@ class ImgArgs:
             raise Exception('pdf_tex does not call a script')
         return os.path.join(_get_script_dir(), self.script)
 
-    def get_src_paths(self):
-        '''returns a list of all known files which the resulting image
-        depends on.'''
-        src = [self.get_dest_path()]
+    def get_targets(self):
+        targets = []
         if self.is_py_script():
-            src.append(self.get_script_path())
+            targets.append(os.path.join(_get_dest_dir(), self.img))
         elif self.is_pdftex_script():
             imgbase = os.path.splitext(self.img)[0]
-            src.append(os.path.join(_get_dest_dir(), '../', imgbase + '.svg'))
-        return src
+            targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf_tex'))
+            targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf'))
+        return targets
 
-    def get_dest_path(self):
-        return os.path.join(_get_dest_dir(), self.img)
-
+    def get_sources(self):
+        '''returns a list of all known files which the resulting image
+        depends on.'''
+        deps = []
+        if self.is_py_script():
+            # this is commented because it's kindof annoying to rebuild every
+            # plot whenever the script is modified
+            #deps.append(self.get_script_path())
+            pass
+        elif self.is_pdftex_script():
+            imgbase = os.path.splitext(self.img)[0]
+            deps.append(os.path.join(_get_dest_dir(), '../', imgbase + '.svg'))
+        return deps
 
 # a dictionary mapping of image filename to script (including
 # script arguments) for all dependencies known in the imgdep.json file
@@ -55,10 +64,6 @@ fname_to_script = None
 
 # a set of already processed scripts
 processed_scripts = set()
-
-# all image dependencies for this script (an ImgArgs object for each image
-# which called img()
-imgdeps = {}
 
 savepath = None
 
@@ -117,22 +122,12 @@ def _get_img_args(imgpath):
                 'Script does not exist {}'.format(scriptfull))
     return imgargs
 
-def _add_img_dep(imgpath):
-    imgargs = _get_img_args(imgpath)
-    if imgargs.img not in imgdeps:
-        imgdeps[imgargs.img] = imgargs
-
 def _process_img(imgpath):
 
     imgargs = _get_img_args(imgpath)
     args = ''
     if imgargs.args is not None:
         args = imgargs.args
-
-    destpath = imgargs.get_dest_path()
-    if os.path.isfile(destpath):
-        print('=== img already exists, skipping: {}'.format(imgpath))
-        return
 
     global processed_scripts
     if not imgargs.processed_key() in processed_scripts:
@@ -158,16 +153,19 @@ def _process_img(imgpath):
     else:
         print('=== script already run, skipping {}'.format(imgargs.script))
 
-    if not os.path.isfile(destpath):
-        raise Exception(
-            'Image {} was not built by script {}.'
-            .format(imgpath, imgargs.script))
+    targets = imgargs.get_targets()
+    for target in targets:
+        if not os.path.isfile(target):
+            raise Exception(
+                'Image {} was not built by script {}.'
+                .format(target, imgargs.script))
 
-def get_img_deps():
-    img = []
-    for imgarg in imgdeps.values():
-        img.append(imgarg)
-    return img
+def get_img_source_targets(imgpath):
+    if fname_to_script is None:
+        _load_image_deps()
+
+    imgargs = _get_img_args(imgpath)
+    return imgargs.get_sources(), imgargs.get_targets()
 
 def set_save_path(path):
     global savepath
@@ -184,6 +182,5 @@ def img(imgpath):
     if fname_to_script is None:
         _load_image_deps()
 
-    _add_img_dep(imgpath)
     _process_img(imgpath)
 

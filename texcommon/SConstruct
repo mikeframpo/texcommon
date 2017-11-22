@@ -71,45 +71,55 @@ else:
     srctex = src[0]
     target = replace_ext(srctex, 'pdf')
 
+# create a new build environment
+env = Environment()
+
+def tex_builder(target, source, env):
+    srctex_clean = srctex.lstrip('#')
+    return os.system('latexmk -pdf ' + srctex_clean)
+tex_bld = Builder(action=tex_builder)
+env.Append(BUILDERS={'TexBuild': tex_bld})
+
+texbuild = env.TexBuild(target, srctex)
+Default(texbuild)
+
+# create a builder for building the image files
+def img_builder(target, source, env):
+    imgdep_name = os.path.split(str(target[0]))[-1]
+    imgdep.img(imgdep_name)
+    return None
+img_bld = Builder(action=img_builder)
+env.Append(BUILDERS={'ImgBuild': img_bld})
+
 # get the image dependencies for the source tex file
 imgdep_paths = gen_imgdep_paths(srctex)
 
 # generate the images if necessary
 for imgdep_path in imgdep_paths:
-    imgdep_name = os.path.split(imgdep_path)[-1]
+    # only need to build images which contain the gen dir in the path
     if imgdep_path.find(imgdep._get_dest_dir()) != -1:
-        print('imgdep:building:\t{}'.format(imgdep_name))
-        imgdep.img(imgdep_name)
-    else:
-        print('imgdep:skipping:\t{}'.format(imgdep_name))
+        imgdep_name = os.path.split(imgdep_path)[-1]
 
-print('### building: ' + target)
-print('### from tex: ' + srctex)
-#print('### src: ' + str(src))
+        sources, targets = imgdep.get_img_source_targets(imgdep_name)
+        imgbuild = env.ImgBuild(targets, sources)
+        Depends(texbuild, imgbuild)
 
-srctex = srctex.lstrip('#')
-env = Environment()
-cmd = env.Command(target, src, 'latexmk -pdf ' + srctex)
-
-for imgarg in imgdep.get_img_deps():
-    for imgsrc in imgarg.get_src_paths():
-        Depends(cmd, imgsrc)
-
-Clean(cmd, Glob('#/*.pdf'))
-Clean(cmd, Glob('#/*.bbl'))
-Clean(cmd, Glob('#/*.blg'))
-Clean(cmd, Glob('#/*.fdb_latexmk'))
-Clean(cmd, Glob('#/*.fls'))
-Clean(cmd, Glob('#/*.log'))
-Clean(cmd, Glob('#/*.glg'))
-Clean(cmd, Glob('#/*.glo'))
-Clean(cmd, Glob('#/*.gls'))
-Clean(cmd, Glob('#/*.ist'))
-Clean(cmd, Glob('#/*.xdy'))
-Clean(cmd, Glob('#/*.aux'))
-Clean(cmd, Glob('#/*.toc'))
-Clean(cmd, Glob('#/*.out'))
-Clean(cmd, Glob('#/*.idx'))
-Clean(cmd, Glob('#/*.ilg'))
-Clean(cmd, Glob('#/*.ind'))
+Clean(texbuild, Glob('#/*.bbl'))
+Clean(texbuild, Glob('#/*.blg'))
+Clean(texbuild, Glob('#/*.fdb_latexmk'))
+Clean(texbuild, Glob('#/*.fls'))
+Clean(texbuild, Glob('#/*.log'))
+Clean(texbuild, Glob('#/*.glg'))
+Clean(texbuild, Glob('#/*.glo'))
+Clean(texbuild, Glob('#/*.gls'))
+Clean(texbuild, Glob('#/*.ist'))
+Clean(texbuild, Glob('#/*.xdy'))
+Clean(texbuild, Glob('#/*.aux'))
+Clean(texbuild, Glob('#/*.toc'))
+Clean(texbuild, Glob('#/*.out'))
+Clean(texbuild, Glob('#/*.idx'))
+Clean(texbuild, Glob('#/*.ilg'))
+Clean(texbuild, Glob('#/*.ind'))
+Clean(texbuild, Glob('#/*.nav'))
+Clean(texbuild, Glob('#/*.snm'))
 
