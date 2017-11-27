@@ -21,26 +21,27 @@ def replace_ext(srcpath, ext):
     base = os.path.splitext(srcpath)[0]
     return base + '.' + ext
 
-def gen_imgdep_paths(srctex):
-    srctexfull = File(srctex).srcnode().abspath
-    srctexdep = mtexrules.Texfile(srctexfull)
+def gen_imgdep_paths(tex):
+    if os.path.splitext(str(tex))[1] == '.tex':
+        srctexfull = File(tex).srcnode().abspath
+        srctexdep = mtexrules.Texfile(srctexfull)
 
-    teximgpaths = []
-    teximgpaths.extend(srctexdep.imagefilenames)
-    teximgpaths.extend(srctexdep.importfilenames)
+        teximgpaths = []
+        teximgpaths.extend(srctexdep.imagefilenames)
+        teximgpaths.extend(srctexdep.importfilenames)
 
-    for subfile in srctexdep.subfilenames:
-        subfilefull = File('#' + subfile).srcnode().abspath
-        subfiletexdep = mtexrules.Texfile(subfilefull)
-        teximgpaths.extend(subfiletexdep.imagefilenames)
-        teximgpaths.extend(subfiletexdep.importfilenames)
+        for subfile in srctexdep.subfilenames:
+            subfilefull = File('#' + subfile).srcnode().abspath
+            subfiletexdep = mtexrules.Texfile(subfilefull)
+            teximgpaths.extend(subfiletexdep.imagefilenames)
+            teximgpaths.extend(subfiletexdep.importfilenames)
 
-    gen_img_paths = []
-    #import pdb; pdb.set_trace()
-    for teximg in teximgpaths:
-        genimg = teximg.replace('\\imgdir/gen', imgdep._get_dest_dir())
-        gen_img_paths.append(genimg)
-    return gen_img_paths
+        gen_img_paths = []
+        for teximg in teximgpaths:
+            genimg = teximg.replace('\\imgdir/gen', imgdep._get_dest_dir())
+            gen_img_paths.append(genimg)
+        return gen_img_paths
+    return []
 
 Import('*')
 
@@ -58,9 +59,7 @@ src.append('references.bib')
 src.append('common.tex')
 src.append('symbols.tex')
 
-src.append(Glob('../tex/tikz/*.tex'))
-src.append(Glob('../img/*'))
-src.append(Glob('../img/gen/*'))
+src.append(Glob('../../img/*'))
 
 textarget = GetOption('tex')
 
@@ -92,7 +91,9 @@ img_bld = Builder(action=img_builder)
 env.Append(BUILDERS={'ImgBuild': img_bld})
 
 # get the image dependencies for the source tex file
-imgdep_paths = gen_imgdep_paths(srctex)
+imgdep_paths = []
+for srcpath in src:
+    imgdep_paths.extend(gen_imgdep_paths(srcpath))
 
 # generate the images if necessary
 for imgdep_path in imgdep_paths:
@@ -103,6 +104,10 @@ for imgdep_path in imgdep_paths:
         sources, targets = imgdep.get_img_source_targets(imgdep_name)
         imgbuild = env.ImgBuild(targets, sources)
         Depends(texbuild, imgbuild)
+
+#import pdb; pdb.set_trace()
+for srcpath in src:
+    Depends(texbuild, srcpath)
 
 Clean(texbuild, Glob('#/*.bbl'))
 Clean(texbuild, Glob('#/*.blg'))
