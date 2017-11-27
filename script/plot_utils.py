@@ -116,6 +116,8 @@ beamersize_inch=(beamerpagesize_inch[0] - 2.0*beamermargins_inch[0],
 # \printinunitsof{cm}\prntlen{\columnwidth}
 ieee_col_width = 8.855 / cm_per_inch
 
+beamer_col_width = 10.79846 / cm_per_inch
+
 def puFig(f):
 
     def create_fig():
@@ -183,6 +185,12 @@ def fig_half_43():
 def fig_beamer_41():
     xdim = beamersize_inch[0]
     ydim = xdim / 4.0
+    return xdim, ydim
+
+@puFig
+def fig_beamer_169():
+    xdim = beamer_col_width
+    ydim = xdim * 9.0 / 16.0
     return xdim, ydim
 
 @puFig
