@@ -76,6 +76,17 @@ def _get_dest_dir():
             'Savepath {} is not a valid directory.'.format(savepath))
     return os.path.realpath(savepath)
 
+tikzdir = None
+
+def _get_tikz_dir():
+    if tikzdir is None:
+        raise Exception('Tikz dir has not been set, call '\
+            + 'imgdep.set_tikz_path() before running build')
+    if not os.path.isdir(tikzdir):
+        raise Exception(
+            'tikzdir {} is not a valid directory.'.format(tikzdir))
+    return os.path.realpath(tikzdir)
+
 def _get_script_dir():
     scriptdir = os.path.join(
                     os.path.dirname(imgdir_path),
@@ -177,6 +188,10 @@ def set_save_path(path):
     # working in an SConscript file.
     global imgdir_path
     imgdir_path = os.path.abspath(__file__)
+
+def set_tikz_path(path):
+    global tikzdir
+    tikzdir = os.path.abspath(path)
 
 def img(imgpath):
     if fname_to_script is None:
