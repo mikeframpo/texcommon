@@ -17,52 +17,57 @@ def relitavise(paths):
             continue
         paths[ipath] = '#' + paths[ipath]
 
+def local_to_abs(path):
+    if not path.startswith('#'):
+        path = '#' + path
+    abspath = File(path).srcnode().abspath
+    return abspath
+
 def replace_ext(srcpath, ext):
     base = os.path.splitext(srcpath)[0]
     return base + '.' + ext
 
 def gen_imgdep_paths(tex):
-    if os.path.splitext(str(tex))[1] == '.tex':
-        srctexfull = File(tex).srcnode().abspath
-        srctexdep = mtexrules.Texfile(srctexfull, process_inputs=False)
+    if not tex.startswith('#'):
+        tex = '#' + tex
+    srctexfull = File(tex).srcnode().abspath
+    srctexdep = mtexrules.Texfile(srctexfull, process_inputs=False)
 
-        # get dependent image files from tex
-        teximgpaths = []
-        teximgpaths.extend(srctexdep.imagefilenames)
+    # get dependent image files from tex
+    teximgpaths = []
+    teximgpaths.extend(srctexdep.imagefilenames)
 
-        # then look for other tex files it depends on
-        texdeppaths = []
+    # then look for other tex files it depends on
+    texdeppaths = []
 
-        def append_tex_deps(tex_imports):
-            for importdep in tex_imports:
-                importext = os.path.splitext(importdep)[1]
-                if importext == '.pdf_tex':
-                    #pdf_tex files are actually images in this build system
-                    teximgpaths.append(importdep)
-                elif importext == '.tex':
-                    texdeppaths.append(importdep)
-                else:
-                    raise Exception('Unexpected import extension')
+    def append_tex_deps(tex_imports):
+        for importdep in tex_imports:
+            importext = os.path.splitext(importdep)[1]
+            if importext == '.pdf_tex':
+                #pdf_tex files are actually images in this build system
+                teximgpaths.append(importdep)
+            elif importext == '.tex':
+                texdeppaths.append(importdep)
+            else:
+                raise Exception('Unexpected import extension')
 
-        append_tex_deps(srctexdep.importfilenames)
-        append_tex_deps(srctexdep.inputfilenames)
+    append_tex_deps(srctexdep.importfilenames)
+    append_tex_deps(srctexdep.inputfilenames)
 
-        for subfile in srctexdep.subfilenames:
-            texdeppaths.append(subfile)
+    for subfile in srctexdep.subfilenames:
+        texdeppaths.append(subfile)
 
-        gen_img_paths = []
-        for teximg in teximgpaths:
-            genimg = teximg.replace('\\imgdir/gen', imgdep._get_dest_dir())
-            gen_img_paths.append(genimg)
+    gen_img_paths = []
+    for teximg in teximgpaths:
+        genimg = teximg.replace('\\imgdir/gen', imgdep._get_dest_dir())
+        gen_img_paths.append(genimg)
 
-        texdeps = []
-        for texdep in texdeppaths:
-            texdepdest = texdep.replace('\\tikzdir', imgdep._get_tikz_dir())
-            texdeps.append(texdepdest)
+    texdeps = []
+    for texdep in texdeppaths:
+        texdepdest = texdep.replace('\\tikzdir', imgdep._get_tikz_dir())
+        texdeps.append(texdepdest)
 
-        return texdeps, gen_img_paths
-
-    return []
+    return texdeps, gen_img_paths
 
 Import('*')
 
@@ -76,11 +81,6 @@ if len(src) == 0:
     raise Exception('no source files specified')
 
 relitavise(src)
-src.append('references.bib')
-src.append('common.tex')
-src.append('symbols.tex')
-
-src.append(Glob('../../img/*'))
 
 textarget = GetOption('tex')
 
@@ -105,6 +105,8 @@ Default(texbuild)
 
 # create a builder for building the image files
 def img_builder(target, source, env):
+    # the imgdep name is the first target, but the corresponding script should
+    # build all other targets
     imgdep_name = os.path.split(str(target[0]))[-1]
     imgdep.img(imgdep_name)
     return None
@@ -126,17 +128,33 @@ while len(tex_to_process) > 0:
     tex_to_process.pop(0)
 
 # generate the images if necessary
+imgdeps = { }
+
 for imgdep_path in imgdep_paths:
     # only need to build images which contain the gen dir in the path
     if imgdep_path.find(imgdep._get_dest_dir()) != -1:
         imgdep_name = os.path.split(imgdep_path)[-1]
+        sources, targets, key = imgdep.get_img_source_targets(imgdep_name)
+        if not imgdeps.has_key(key):
+            # imgdeps holds a tuple for each script-key, containing a list
+            # of sources and a list of targets
+            imgdeps[key] = ([], [],)
+        for source in sources:
+            if source not in imgdeps[key][0]:
+                # it might be possible to have duplicate sources, so we guard
+                # against duplicates here
+                imgdeps[key][0].append(source)
+        for target in targets:
+            assert target not in imgdeps[key][1]
+            imgdeps[key][1].append(target)
 
-        sources, targets = imgdep.get_img_source_targets(imgdep_name)
-        imgbuild = env.ImgBuild(targets, sources)
-        Depends(texbuild, imgbuild)
+for sources, targets in imgdeps.values():
+    imgbuild = env.ImgBuild(targets, sources)
+    Depends(texbuild, imgbuild)
 
 for texdep in tex_processed:
-    Depends(texbuild, texdep)
+    texdepabs = local_to_abs(texdep)
+    Depends(texbuild, texdepabs)
 
 Clean(texbuild, Glob('#/*.bbl'))
 Clean(texbuild, Glob('#/*.blg'))

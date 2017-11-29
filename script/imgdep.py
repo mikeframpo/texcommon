@@ -176,7 +176,7 @@ def get_img_source_targets(imgpath):
         _load_image_deps()
 
     imgargs = _get_img_args(imgpath)
-    return imgargs.get_sources(), imgargs.get_targets()
+    return imgargs.get_sources(), imgargs.get_targets(), imgargs.processed_key()
 
 def set_save_path(path):
     global savepath
