@@ -18,7 +18,7 @@ def relitavise(paths):
         paths[ipath] = '#' + paths[ipath]
 
 def local_to_abs(path):
-    if not path.startswith('#'):
+    if not path.startswith('/') and not path.startswith('#'):
         path = '#' + path
     abspath = File(path).srcnode().abspath
     return abspath
@@ -28,9 +28,7 @@ def replace_ext(srcpath, ext):
     return base + '.' + ext
 
 def gen_imgdep_paths(tex):
-    if not tex.startswith('#'):
-        tex = '#' + tex
-    srctexfull = File(tex).srcnode().abspath
+    srctexfull = local_to_abs(tex)
     srctexdep = mtexrules.Texfile(srctexfull, process_inputs=False)
 
     # get dependent image files from tex
