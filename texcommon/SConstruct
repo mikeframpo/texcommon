@@ -143,8 +143,8 @@ for imgdep_path in imgdep_paths:
                 # against duplicates here
                 imgdeps[key][0].append(source)
         for target in targets:
-            if target in imgdeps[key][1]:
-            imgdeps[key][1].append(target)
+            if target not in imgdeps[key][1]:
+                imgdeps[key][1].append(target)
 
 for sources, targets in imgdeps.values():
     imgbuild = env.ImgBuild(targets, sources)
