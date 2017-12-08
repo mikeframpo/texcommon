@@ -45,7 +45,13 @@ def gen_imgdep_paths(tex):
                 #pdf_tex files are actually images in this build system
                 teximgpaths.append(importdep)
             elif importext == '.tex':
-                texdeppaths.append(importdep)
+                if importdep.find('\\imgdir/gen') != -1:
+                    # this means a tex file is being built
+                    teximgpaths.append(importdep)
+                else:
+                    # in this case it's a regular import which needs to be
+                    # scanned for images
+                    texdeppaths.append(importdep)
             else:
                 raise Exception('Unexpected import extension')
 
@@ -143,7 +149,6 @@ for imgdep_path in imgdep_paths:
                 # against duplicates here
                 imgdeps[key][0].append(source)
         for target in targets:
-            if target in imgdeps[key][1]:
             imgdeps[key][1].append(target)
 
 for sources, targets in imgdeps.values():

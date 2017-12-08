@@ -80,6 +80,14 @@ def showsave(fnames, figs=None, block=True, path=None):
     if not save_enabled():
         plt.show(block=block)
 
+def gen_texfile(fname):
+    
+    genpath = get_save_path()
+    if genpath is not None:
+        return open(os.path.join(genpath, fname), 'w')
+    else:
+        return open('/dev/null', 'w')
+
 fig_keys = { }
 
 def get_fig(key):

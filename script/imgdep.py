@@ -115,7 +115,11 @@ def _load_image_deps():
         scriptdata = script[scriptpath]
         if scriptdata.has_key('args'):
             args = scriptdata['args']
-        images = scriptdata['img']
+        images = []
+        if scriptdata.has_key('img'):
+            images.extend(scriptdata['img'])
+        if scriptdata.has_key('tex'):
+            images.extend(scriptdata['tex'])
         for img in images:
             imgargs = ImgArgs(scriptpath, args, img)
             fname_to_script[img] = imgargs
