@@ -160,6 +160,13 @@ for texdep in tex_processed:
     texdepabs = local_to_abs(texdep)
     Depends(texbuild, texdepabs)
 
+for srcpath in src:
+    # whatever we're building, it depends on all the things in src,
+    # this is a convenient way to get the tex file to depend on other
+    # files that aren't explicitly included as \input statements, such
+    # as the refs file
+    Depends(texbuild, srcpath)
+
 Clean(texbuild, Glob('#/*.bbl'))
 Clean(texbuild, Glob('#/*.blg'))
 Clean(texbuild, Glob('#/*.fdb_latexmk'))
