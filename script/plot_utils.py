@@ -133,6 +133,7 @@ def puFig(f):
             return plt.figure()
         else:
             xdim, ydim = f()
+            print('== Creating fig with dims: %0.2f, %0.2f ==' % (xdim, ydim)) 
             return plt.figure(figsize=(xdim, ydim))
 
     fig_keys[f.__name__] = create_fig
@@ -199,6 +200,12 @@ def fig_beamer_41():
 def fig_beamer_169():
     xdim = beamer_col_width
     ydim = xdim * 9.0 / 16.0
+    return xdim, ydim
+
+@puFig
+def fig_whole_30p():
+    xdim = a4size_inch[0]
+    ydim = a4size_inch[1]*0.3
     return xdim, ydim
 
 @puFig
