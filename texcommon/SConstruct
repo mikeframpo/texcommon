@@ -154,6 +154,7 @@ for imgdep_path in imgdep_paths:
 
 for sources, targets in imgdeps.values():
     imgbuild = env.ImgBuild(targets, sources)
+    NoClean(targets)
     Depends(texbuild, imgbuild)
 
 for texdep in tex_processed:
