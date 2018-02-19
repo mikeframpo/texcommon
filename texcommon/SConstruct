@@ -186,4 +186,5 @@ Clean(texbuild, Glob('#/*.ilg'))
 Clean(texbuild, Glob('#/*.ind'))
 Clean(texbuild, Glob('#/*.nav'))
 Clean(texbuild, Glob('#/*.snm'))
+Clean(texbuild, Glob('#/*.pdf'))
 
