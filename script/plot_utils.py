@@ -314,7 +314,7 @@ def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
 
     if label is not None:
         ax.plot(fft.f[ii], np.abs(fft[ii]), fmt, label=label)
-        plt.legend(True)
+        plt.legend()
     else:
         ax.plot(fft.f[ii], np.abs(fft[ii]))
 
