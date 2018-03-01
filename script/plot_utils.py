@@ -268,15 +268,17 @@ def get_fft(sig, zpfactor=None):
         sig = sig.zeropad(len(sig) * zpfactor)
     return sig.fft()
 
-def plt_spec(sig, title=None, label=None, fname=None, zpfactor=None,
+def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
                 fmin=None, fmax=None, ftick=None, norm=None, db=False,
                 fmt=''):
     xlabel = 'Frequency (Hz)'
     ylabel = 'FFT Magnitude'
+
     if sig.fdomain:
         fft = sig
     else:
         fft = get_fft(sig, zpfactor=zpfactor)
+
     if norm is not None:
         if type(norm) is bool:
             scalefac = max(abs(fft))
@@ -287,28 +289,36 @@ def plt_spec(sig, title=None, label=None, fname=None, zpfactor=None,
             raise Exception('unsupported norm type')
         fft = fft.scale(1.0/scalefac)
         ylabel += ' (normalised)'
-    if db:
-        fft = 20*np.log10(fft)
-    if title is not None:
-        plt.title(title)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
+
     if fmin is None:
         fmin = 0
     if fmax is None:
-        fmax = 10000
-    if ftick is None:
-        plt.xticks(np.arange(0, fmax, float(fmax)/20), rotation=-30)
-    else:
-        plt.xticks(np.arange(0, fft.f[len(fft.f) / 2 - 1], ftick), rotation=-30)
-    plt.axis(xmin=fmin, xmax=fmax)
-    plt.grid(True)
+        fmax = sig.f.max()
+
+    ii = np.where(fft.f >= 0)
+
+    if db:
+        fft = 20*np.log10(fft)
+
+    if title is not None:
+        ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+
+    #if ftick is None:
+    #    plt.xticks(np.arange(0, fmax, float(fmax)/20), rotation=-30)
+    #else:
+    #    plt.xticks(np.arange(0, fft.f[len(fft.f) / 2 - 1], ftick), rotation=-30)
+
+    ax.grid(True)
+
     if label is not None:
-        plt.plot(fft.f, np.abs(fft), fmt, label=label)
+        ax.plot(fft.f[ii], np.abs(fft[ii]), fmt, label=label)
+        plt.legend(True)
     else:
-        plt.plot(fft.f, np.abs(fft))
-    plt.legend()
-    plt.gcf().subplots_adjust(bottom=0.15)
+        ax.plot(fft.f[ii], np.abs(fft[ii]))
+
+    ax.set_xlim((fmin, fmax))
 
     return fft
 
