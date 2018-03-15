@@ -219,7 +219,7 @@ def fig_6x6():
 
 def plt_sig(sig, title=None, label=None, fmt=None, xmin=None, xmax=None,
             kwargs=None, fname=None, t=None, tscale=1e6, legloc=None,
-            xlim=None, ylim=None, xlabel='Time ($\mu \; s$',
+            xlim=None, ylim=None, xlabel='Time ($\mu$s)',
             ylabel='Voltage ($V$)'):
 
     if title is not None:
