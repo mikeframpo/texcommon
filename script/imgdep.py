@@ -4,6 +4,7 @@ import json
 import subprocess
 
 SCRIPT_PDFTEX = 'pdf_tex'
+SCRIPT_ISCAPEPDF = 'inkscape_pdf'
 
 class ImgArgs:
 
@@ -20,6 +21,8 @@ class ImgArgs:
             return key
         elif self.is_pdftex_script():
             return SCRIPT_PDFTEX + '_' + self.img
+        elif self.is_inkscape_pdf():
+            return SCRIPT_ISCAPEPDF + '_' + self.img
         else:
             raise Exception('Unknown script type')
 
@@ -29,8 +32,11 @@ class ImgArgs:
     def is_pdftex_script(self):
         return self.script == SCRIPT_PDFTEX
 
+    def is_inkscape_pdf(self):
+        return self.script == SCRIPT_ISCAPEPDF
+
     def get_script_path(self):
-        if self.is_pdftex_script():
+        if self.is_pdftex_script() or self.is_inkscape_pdf():
             raise Exception('pdf_tex does not call a script')
         return os.path.join(_get_script_dir(), self.script)
 
@@ -38,10 +44,11 @@ class ImgArgs:
         targets = []
         if self.is_py_script():
             targets.append(os.path.join(_get_dest_dir(), self.img))
-        elif self.is_pdftex_script():
+        elif self.is_pdftex_script() or self.is_inkscape_pdf():
             imgbase = os.path.splitext(self.img)[0]
-            targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf_tex'))
             targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf'))
+            if self.is_pdftex_script():
+                targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf_tex'))
         return targets
 
     def get_sources(self):
@@ -53,7 +60,7 @@ class ImgArgs:
             # plot whenever the script is modified
             #deps.append(self.get_script_path())
             pass
-        elif self.is_pdftex_script():
+        elif self.is_pdftex_script() or self.is_inkscape_pdf():
             imgbase = os.path.splitext(self.img)[0]
             deps.append(os.path.join(_get_dest_dir(), '../', imgbase + '.svg'))
         return deps
@@ -154,10 +161,15 @@ def _process_img(imgpath):
             print('=== running script {}'.format(cmd))
             ret = subprocess.call(cmd, shell=True, cwd=scriptloc)
 
-        if imgargs.is_pdftex_script():
+        if imgargs.is_pdftex_script() or imgargs.is_inkscape_pdf():
+
+            extraargs = ''
+            if imgargs.is_pdftex_script():
+                extraargs = '--export-latex'
+
             imgbase = os.path.splitext(imgargs.img)[0]
-            cmd = 'inkscape -C -z --file=../%s.svg --export-pdf=%s.pdf --export-latex'\
-                    % (imgbase, imgbase)
+            cmd = 'inkscape -C -z --file=../%s.svg --export-pdf=%s.pdf %s'\
+                    % (imgbase, imgbase, extraargs)
             print('=== running script %s' % cmd)
             ret = subprocess.call(cmd, shell=True, cwd=_get_dest_dir())
 
