@@ -86,7 +86,7 @@ def gen_texfile(fname):
     if genpath is not None:
         return open(os.path.join(genpath, fname), 'w')
     else:
-        return open('/dev/null', 'w')
+        return open('/dev/stdout', 'w')
 
 fig_keys = { }
 
