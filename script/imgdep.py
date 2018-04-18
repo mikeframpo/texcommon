@@ -46,9 +46,12 @@ class ImgArgs:
             targets.append(os.path.join(_get_dest_dir(), self.img))
         elif self.is_pdftex_script() or self.is_inkscape_pdf():
             imgbase = os.path.splitext(self.img)[0]
-            targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf'))
-            if self.is_pdftex_script():
+            if self.is_inkscape_pdf():
+                targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf'))
+            elif self.is_pdftex_script():
                 targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf_tex'))
+        else:
+            raise Exception('Unknown script type')
         return targets
 
     def get_sources(self):
