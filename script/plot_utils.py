@@ -270,25 +270,25 @@ def get_fft(sig, zpfactor=None):
 
 def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
                 fmin=None, fmax=None, ftick=None, norm=None, db=False,
-                fmt=''):
+                fmt='', normmode='rms'):
     xlabel = 'Frequency (Hz)'
     ylabel = 'FFT Magnitude'
 
+    if norm is not None:
+        if type(norm) is bool:
+            if normmode == 'rms':
+                scalefac = sig.rms()
+        elif isinstance(norm, np.ndarray):
+            scalefac = norm.rms()
+        else:
+            raise Exception('unsupported norm type')
+        sig = sig.scale(1.0/scalefac)
+
+        ylabel += ' (normalised)'
     if sig.fdomain:
         fft = sig
     else:
         fft = get_fft(sig, zpfactor=zpfactor)
-
-    if norm is not None:
-        if type(norm) is bool:
-            scalefac = max(abs(fft))
-        elif isinstance(norm, np.ndarray):
-            normfft = get_fft(norm, zpfactor=zpfactor)
-            scalefac = max(abs(normfft))
-        else:
-            raise Exception('unsupported norm type')
-        fft = fft.scale(1.0/scalefac)
-        ylabel += ' (normalised)'
 
     if fmin is None:
         fmin = 0
