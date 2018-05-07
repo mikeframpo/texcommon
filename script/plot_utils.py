@@ -107,6 +107,7 @@ a4margins_inch=(2.0/cm_per_inch, 3.0/cm_per_inch)
 
 # the available size in inches, two margin widths are subtracted from either
 # side to get the available page space
+# The width is approx 6.69 in
 a4size_inch=(a4pagesize_inch[0] - 2.0*a4margins_inch[0],
                 a4pagesize_inch[1] - 2.0*a4margins_inch[1])
 

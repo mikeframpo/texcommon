@@ -50,6 +50,7 @@ class ImgArgs:
                 targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf'))
             elif self.is_pdftex_script():
                 targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf_tex'))
+                targets.append(os.path.join(_get_dest_dir(), imgbase + '.pdf'))
         else:
             raise Exception('Unknown script type')
         return targets
