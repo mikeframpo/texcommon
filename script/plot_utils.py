@@ -32,6 +32,7 @@ if save_enabled():
         "ytick.labelsize": 8,
         "figure.figsize": (10.0, 10.0),     # default fig size of 0.9 textwidth
         "axes.linewidth": 1.5,
+        "lines.linewidth": 1.5,
         "pgf.preamble": [
             r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
             r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
@@ -41,8 +42,8 @@ if save_enabled():
 
 import matplotlib.pyplot as plt
 
+# maybe this was necessary if plot_utils wasn't imported first??
 #mpl.rcParams.update ({'font.size': 7})
-mpl.rcParams['lines.linewidth'] = 1.0
 
 def savefig(path, fig=None):
     dpi=200
