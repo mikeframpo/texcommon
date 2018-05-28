@@ -265,14 +265,16 @@ def plt_series_separate(sigs):
     for sig in sigs:
         plt_sig_separate(sig)
 
-def get_fft(sig, zpfactor=None):
+def get_fft(sig, zpfactor=None, window=False):
+    if window:
+        sig = sig.window('hamming')
     if zpfactor is not None:
         sig = sig.zeropad(len(sig) * zpfactor)
     return sig.fft()
 
 def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
                 fmin=None, fmax=None, ftick=None, norm=None, db=False,
-                fmt='', normmode='rms'):
+                fmt='', normmode='rms', window=False):
     xlabel = 'Frequency (Hz)'
     ylabel = 'FFT Magnitude'
 
@@ -290,7 +292,7 @@ def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
     if sig.fdomain:
         fft = sig
     else:
-        fft = get_fft(sig, zpfactor=zpfactor)
+        fft = get_fft(sig, zpfactor=zpfactor, window=window)
 
     if fmin is None:
         fmin = 0
@@ -300,25 +302,23 @@ def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
     ii = np.where(fft.f >= 0)
 
     if db:
-        fft = 20*np.log10(fft)
+        fft = 20*np.log10(abs(fft))
+        ylabel += ' (dB)'
+    else:
+        fft = abs(fft)
 
     if title is not None:
         ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
 
-    #if ftick is None:
-    #    plt.xticks(np.arange(0, fmax, float(fmax)/20), rotation=-30)
-    #else:
-    #    plt.xticks(np.arange(0, fft.f[len(fft.f) / 2 - 1], ftick), rotation=-30)
-
     ax.grid(True)
 
     if label is not None:
-        ax.plot(fft.f[ii], np.abs(fft[ii]), fmt, label=label)
+        ax.plot(fft.f[ii], fft[ii], fmt, label=label)
         plt.legend()
     else:
-        ax.plot(fft.f[ii], np.abs(fft[ii]))
+        ax.plot(fft.f[ii], fft[ii])
 
     ax.set_xlim((fmin, fmax))
 
