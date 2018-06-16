@@ -199,6 +199,12 @@ def fig_beamer_41():
     return xdim, ydim
 
 @puFig
+def fig_beamer_43():
+    xdim = beamersize_inch[0]
+    ydim = xdim * 0.75
+    return xdim, ydim
+
+@puFig
 def fig_beamer_169():
     xdim = beamer_col_width
     ydim = xdim * 9.0 / 16.0
