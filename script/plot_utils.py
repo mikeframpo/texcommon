@@ -284,6 +284,7 @@ def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
     xlabel = 'Frequency (Hz)'
     ylabel = 'FFT Magnitude'
 
+    scalefac = None
     if norm is not None:
         if type(norm) is bool:
             if normmode == 'rms':
@@ -292,13 +293,22 @@ def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
             scalefac = norm.rms()
         else:
             raise Exception('unsupported norm type')
-        sig = sig.scale(1.0/scalefac)
+
+        if scalefac is not None:
+            sig = sig.scale(1.0/scalefac)
 
         ylabel += ' (normalised)'
     if sig.fdomain:
         fft = sig
     else:
         fft = get_fft(sig, zpfactor=zpfactor, window=window)
+
+    if norm is not None:
+        if normmode =='max':
+            scalefac = max(abs(fft))
+
+        if scalefac is not None:
+            fft /= scalefac
 
     if fmin is None:
         fmin = 0
