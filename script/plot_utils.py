@@ -290,7 +290,10 @@ def plt_spec(sig, ax, title=None, label=None, fname=None, zpfactor=None,
             if normmode == 'rms':
                 scalefac = sig.rms()
         elif isinstance(norm, np.ndarray):
-            scalefac = norm.rms()
+            if normmode == 'rms':
+                scalefac = norm.rms()
+            elif normmode == 'max':
+                scalefac = abs(get_fft(sig, zpfactor=zpfactor, window=window)).max()
         else:
             raise Exception('unsupported norm type')
 
